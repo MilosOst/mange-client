@@ -1,0 +1,92 @@
+@value brand-red from './colors.css';
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	background-color: brand-red;
+}
+
+.brandTitle {
+	color: white;
+}
+
+.menuBtn {
+	display: none;
+}
+
+.brandLogo {
+	width: min(200px, 50vw);
+}
+
+.navLinks {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	list-style: none;
+}
+
+.navLink {
+	font-size: 1.1rem;
+	color: whitesmoke;	
+	font-weight: bold;
+	text-decoration: none;
+	transition: color 0.3s ease-in-out;
+}
+
+.navLink:hover {
+	text-decoration: underline;
+}
+
+.navLink.active {
+	color: black;
+}
+
+.profileSection {
+	display: flex;
+	align-items: center;
+	gap: 1rem;			
+}
+
+
+.loginBtn, .logoutBtn {
+	color: red;
+	background-color: white !important;
+}
+
+
+@media screen and (max-width: 768px) {
+	.navbar {
+		flex-direction: column;
+		justify-content: center;
+		gap: 8px;
+	}
+
+	.navHeader {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.menuBtn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: inherit;
+		border: none;
+		cursor: pointer;
+	}
+
+	.navLinks, .profileSection {
+		display: none;
+	}
+
+	.navLinks.expanded, .profileSection.expanded {
+		display: flex;
+		flex-direction: column;
+		margin-top: 8px;
+	}
+}
