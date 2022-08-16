@@ -1,0 +1,65 @@
+.authForm {
+	text-align: center;
+	width: min(500px, 90vw);
+	margin: 2rem auto;
+	padding: 1rem;
+	border-radius: 8px;
+	background-color: white;
+}
+
+.formTitle {
+	margin-bottom: 8px;
+}
+
+.accountLink {
+	color: royalblue;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.acccountLink:visited {
+	color: black;
+}
+
+.formContent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 8px;
+	width: 100%;
+	border: 1px solid gainsboro;
+	border-radius: 8px;
+}
+
+.formLabel {
+	font-weight: bold;
+}
+
+.formInput {
+	padding: 4px;
+	background-color: inherit;
+	border: none;
+	font-size: 1.1rem;
+	font-family: inherit;
+}
+
+.submitBtn {
+	width: 100%;
+}
+
+.errors {
+	list-style: none;
+}
+
+.errors, .error {
+	color: red;
+}

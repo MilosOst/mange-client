@@ -53,7 +53,7 @@
 
 
 .loginBtn, .logoutBtn {
-	color: red;
+	color: brand-red !important;
 	background-color: white !important;
 }
 
