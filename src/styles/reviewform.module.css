@@ -1,0 +1,18 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 1rem;
+	padding: 1rem 0;
+}
+
+.stepper {
+	width: 75%;
+	margin: 2rem auto,
+}
+
+
+.textField {
+	width: 100%;
+	margin: 0.5rem 0 !important;
+}
