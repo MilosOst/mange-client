@@ -4,6 +4,7 @@
 	align-items: center;
 	margin-top: 1rem;
 	padding: 1rem 0;
+	width: 100%;
 }
 
 .stepper {
@@ -15,4 +16,10 @@
 .textField {
 	width: 100%;
 	margin: 0.5rem 0 !important;
+}
+
+.progSection {
+	display: flex;
+	justify-content: space-between;
+	width: 90%;
 }

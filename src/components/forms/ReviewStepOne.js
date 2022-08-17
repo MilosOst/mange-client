@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
 	Typography,
 	Button,
@@ -7,10 +7,7 @@ import {
 } from "@mui/material";
 import styles from '../../styles/reviewform.module.css';
 
-function ReviewStepOne() {
-	const [restaurantName, setRestaurantName] = useState('');
-	const [city, setCity] = useState('');
-	const [restaurants, setRestaurants] = useState([]);
+function ReviewStepOne({ restaurantName, setRestaurantName, city, setCity, restaurants, setRestaurants, selectedRestaurant, setSelectedRestaurant}) {
 
 	const getRestaurants = async () => {
 		const request = await fetch(`http://localhost:3000/v1/restaurants/search?query=${restaurantName}&near=${city}`, {
@@ -28,14 +25,12 @@ function ReviewStepOne() {
 			setRestaurants(data.results)
 			console.log(data.results);
 		}
-
-
 	};
 
 	return (
 		<div>
 			<Typography variant='h5'>Select a restaurant</Typography>
-			<form>
+			<div>
 				<TextField
 					className={styles.textField}
 					label="Restaurant Name"
@@ -61,15 +56,22 @@ function ReviewStepOne() {
 					>
 					Search Restaurants
 				</Button>
-				{(restaurants.length > 0) && 
-					<Autocomplete
-						options={restaurants}
-						getOptionLabel={option => `${option.name} - ${option.location.address}`}
-						renderInput={(option) => <TextField  {...option} label={option.name} variant="outlined" key={option.fsq_id}/>}
-					/>
+				<Autocomplete
+					value={selectedRestaurant}
+					onChange={(e, value) => setSelectedRestaurant(value)}
+					options={restaurants}
+					getOptionLabel={option => option.formatted}
+					renderInput={(option) => {
+						return <TextField{...option}
+							label={option.name}
+							variant="outlined"
+							key={option.fsq_id}
+							error={!selectedRestaurant}
+							required/>
+					}}
+				/>
 				
-				}
-			</form>
+			</div>
 		</div>
 	);
 }
