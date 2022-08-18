@@ -18,12 +18,11 @@ function ReviewStepOne({ restaurantName, setRestaurantName, city, setCity, resta
 		});
 
 		if (request.status !== 200) {
-			console.log('error');
+			return;
 		}
 		else {
 			const data = await request.json();
 			setRestaurants(data.results)
-			console.log(data.results);
 		}
 	};
 
@@ -62,8 +61,8 @@ function ReviewStepOne({ restaurantName, setRestaurantName, city, setCity, resta
 					options={restaurants}
 					getOptionLabel={option => option.formatted}
 					renderInput={(option) => {
-						return <TextField{...option}
-							label={option.name}
+						return <TextField {...option}
+							label={'Restaurant'}
 							variant="outlined"
 							key={option.fsq_id}
 							error={!selectedRestaurant}

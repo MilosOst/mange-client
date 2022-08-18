@@ -1,3 +1,5 @@
+@value brand-red from './colors.css';
+
 .form {
 	display: flex;
 	flex-direction: column;
@@ -22,4 +24,80 @@
 	display: flex;
 	justify-content: space-between;
 	width: 90%;
+}
+
+.backBtn {
+	border-color: black !important;
+	color: black !important;
+}
+
+.nextBtn {
+	margin-left: auto !important;
+	border-color: brand-red !important;
+	background-color: rgba(0, 0, 0, 90%) !important;
+	color: white !important;
+}
+
+.stepTwo {
+	width: 75%;
+}
+
+.formHeader {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.addBtn {
+	background-color: brand-red !important;
+}
+
+.addBtn:hover {
+	filter: brightness(0.9);
+	background-color: brand-red;
+}
+
+.title {
+	display: flex !important;
+	margin: 1.5rem !important;
+}
+
+.reviews {
+	display: grid;
+	gap: 2rem;
+	margin: 1rem auto;
+}
+
+.reviewHeader {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	width: 100%;
+}
+
+.dishReview {
+	display: grid;
+	gap: 1rem;
+}
+
+.error {
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: brand-red;
+	text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+	.stepTwo {
+		width: 90%;
+	}
+
+	.reviewHeader {
+		flex-direction: column;
+	}
+
+	.selectDish {
+		width: 100%;
+	}
 }

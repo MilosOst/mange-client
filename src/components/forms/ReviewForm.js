@@ -2,30 +2,68 @@ import React, { useState } from "react";
 import { Container, Stepper, Step, StepLabel, Paper, Button } from "@mui/material";
 import styles from '../../styles/reviewform.module.css';
 import ReviewStepOne from "./ReviewStepOne.js";
+import ReviewStepTwo from "./ReviewStepTwo.js";
 
 
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
 
-	// Step One Information
+	// Step One props
 	const [restaurantName, setRestaurantName] = useState('');
 	const [city, setCity] = useState('');
 	const [restaurants, setRestaurants] = useState([]);
 	const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
+	// Step Two props
+	const [ratingsError, setRatingsError] = useState(null);
+	const [reviews, setReviews] = useState([{}]);
+	const [reviewTitle, setReviewTitle] = useState('');
+	const [availableDishes, setAvailableDishes] = useState([]);
 
 	const getSteps = () => {
-		return ['Choose Restaurant', 'Add Reviews', 'Finish'];
+		return ['Choose Restaurant', 'Add Reviews'];
 	}
 
-	const handleNext = (e) => {
+	const getRestaurantDishes = async () => {
+		const request = await fetch(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/menu`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		});
+
+		if (request.status === 200) {
+			const data = await request.json();
+			return data.menu;
+		}
+		return [];
+	};
+
+	const handleNext = async (e) => {
 		e.preventDefault();
+
+		if (activeStep === 0) {
+			// Get restaurant dishes when progression to second stage
+			const dishes = await getRestaurantDishes();
+			setAvailableDishes(dishes);
+		}
+		else if (activeStep === 1) {
+			// First, verify ratings are specified for all reviews
+			const isRatingsSet = reviews.every((review) => review.rating > 0);
+			
+			if (!isRatingsSet) {
+				setRatingsError('You must select a rating for each review.')
+				return;
+			}
+		}
 		setActiveStep(prevNum => prevNum + 1);
 	}
 
 	const handleBack = () => {
 		setActiveStep(prevNum => prevNum - 1);
 	}
+
+	
 
 	const getStepsContent = (stepIndex) => {
 		switch (stepIndex) {
@@ -40,9 +78,15 @@ function ReviewForm() {
 					selectedRestaurant={selectedRestaurant}
 					setSelectedRestaurant={setSelectedRestaurant} />
 			case 1:
-				return 'Step 2 (Add Dish Reviews)';
-			case 2:
-				return 'Step 3 (Confirm Submission)';
+				return <ReviewStepTwo
+					reviews={reviews}
+					setReviews={setReviews}
+					availableDishes={availableDishes}
+					setAvailableDishes={setAvailableDishes}
+					reviewTitle={reviewTitle}
+					setReviewTitle={setReviewTitle}
+					ratingsError={ratingsError}
+				/>
 			default:
 				return 'Unknown Step';
 		}
@@ -72,17 +116,20 @@ function ReviewForm() {
 				<form onSubmit={handleNext} className={styles.form}>
 					{getStepsContent(activeStep)}
 					<div className={styles.progSection}>
-						{activeStep > 0 &&
-							<Button variant="outlined" onClick={handleBack}>
+						{activeStep === 1 &&
+							<Button
+								variant="outlined"
+								onClick={handleBack}
+								className={styles.backBtn}>
 								Back
 							</Button>
 						}
 						{activeStep < getSteps().length &&
 							<Button
 								type='submit'
-								variant="outlined"
-								sx={{ marginLeft: 'auto' }}>
-								{activeStep === getSteps().length - 1 ? 'Finish' : 'Next'}
+								variant="contained"
+								className={styles.nextBtn}>
+								{activeStep === getSteps().length - 1 ? 'Post Review' : 'Next'}
 							</Button>
 						}
 					</div>
