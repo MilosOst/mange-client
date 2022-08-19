@@ -10,6 +10,7 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 
 	return (
 		<Card variant='outlined' sx={{ padding: '2rem' }} className={styles.dishReview}>
+			<div onClick={() => console.log(review)}>Cad</div>
 			<header className={styles.reviewHeader}>
 				<Autocomplete
 					className={styles.selectDish}

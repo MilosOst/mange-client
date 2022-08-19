@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Container, Stepper, Step, StepLabel, Paper, Button } from "@mui/material";
+import { Container, Stepper, Step, StepLabel, Paper, Button, Typography } from "@mui/material";
 import styles from '../../styles/reviewform.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import ReviewStepOne from "./ReviewStepOne.js";
 import ReviewStepTwo from "./ReviewStepTwo.js";
 
 
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
+	const navigate = useNavigate();
 
 	// Step One props
 	const [restaurantName, setRestaurantName] = useState('');
@@ -15,7 +17,7 @@ function ReviewForm() {
 	const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
 	// Step Two props
-	const [ratingsError, setRatingsError] = useState(null);
+	const [validationErrors, setValidationErrors] = useState(null);
 	const [reviews, setReviews] = useState([{}]);
 	const [reviewTitle, setReviewTitle] = useState('');
 	const [availableDishes, setAvailableDishes] = useState([]);
@@ -43,20 +45,48 @@ function ReviewForm() {
 		e.preventDefault();
 
 		if (activeStep === 0) {
-			// Get restaurant dishes when progression to second stage
+			// Get restaurant dishes when progressing to second stage
 			const dishes = await getRestaurantDishes();
 			setAvailableDishes(dishes);
+			setActiveStep(prevNum => prevNum + 1);
 		}
 		else if (activeStep === 1) {
 			// First, verify ratings are specified for all reviews
 			const isRatingsSet = reviews.every((review) => review.rating > 0);
 			
 			if (!isRatingsSet) {
-				setRatingsError('You must select a rating for each review.')
+				setValidationErrors([ { msg: 'You must select a rating for each review.' } ]);
 				return;
 			}
+
+			const request = await fetch(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': localStorage.getItem('token'),
+				},
+				body: JSON.stringify({
+					restaurant: selectedRestaurant,
+					reviews,
+					review_title: reviewTitle,
+				}),
+			});
+
+			console.log(request.status)
+
+			if (request.status === 201) {
+				setActiveStep(prevNum => prevNum + 1);
+				return;
+			}
+			else if (request.status === 401) {
+				navigate('/login');
+			}
+			else {
+				const data = await request.json();
+				setValidationErrors(data.errors);
+			}
 		}
-		setActiveStep(prevNum => prevNum + 1);
+		
 	}
 
 	const handleBack = () => {
@@ -85,10 +115,12 @@ function ReviewForm() {
 					setAvailableDishes={setAvailableDishes}
 					reviewTitle={reviewTitle}
 					setReviewTitle={setReviewTitle}
-					ratingsError={ratingsError}
+					validationErrors={validationErrors}
 				/>
 			default:
-				return 'Unknown Step';
+				return <Typography variant="h4" component={Link} to='/'>
+					Thank you for your submission. Return to homepage
+				</Typography>
 		}
 	}
 	

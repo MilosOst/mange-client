@@ -3,7 +3,7 @@ import { Typography, Button, TextField } from "@mui/material";
 import styles from '../../styles/reviewform.module.css';
 import DishReview from "./DishReview.js";
 
-function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, ratingsError }) {
+function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, validationErrors }) {
 	const [error, setError] = useState(null);
 	
 	const addReview = () => {
@@ -73,7 +73,10 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 						/>
 				})}
 			</ul>
-			<p className={styles.error}>{error || ratingsError}</p>
+			<p className={styles.error}>{error}</p>
+			{validationErrors && 
+				validationErrors.map((error) => <li key={error.msg}>{error.msg}</li>)
+			}
 		</div>
 	);
 }
