@@ -2,8 +2,8 @@ import React from "react";
 
 const RatingFull = (props) => (
 	<svg
-		width={50}
-		height={50}
+		width={props.width}
+		height={props.height}
 		viewBox="0 0 480 480"
 		xmlns="http://www.w3.org/2000/svg"
 		{...props}

@@ -75,7 +75,9 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 			</ul>
 			<p className={styles.error}>{error}</p>
 			{validationErrors && 
-				validationErrors.map((error) => <li key={error.msg}>{error.msg}</li>)
+				<ul style={{ listStyle: 'none' }}>
+					{validationErrors.map((error) => <li className={styles.error} key={error.msg}>{error.msg}</li>)}
+				</ul>
 			}
 		</div>
 	);

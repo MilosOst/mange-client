@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Stepper, Step, StepLabel, Paper, Button, Typography } from "@mui/material";
+import { Container, Stepper, Step, StepLabel, Paper, Button, Alert } from "@mui/material";
 import styles from '../../styles/reviewform.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ReviewStepOne from "./ReviewStepOne.js";
@@ -86,14 +86,11 @@ function ReviewForm() {
 				setValidationErrors(data.errors);
 			}
 		}
-		
-	}
+	};
 
 	const handleBack = () => {
 		setActiveStep(prevNum => prevNum - 1);
-	}
-
-	
+	};
 
 	const getStepsContent = (stepIndex) => {
 		switch (stepIndex) {
@@ -118,9 +115,12 @@ function ReviewForm() {
 					validationErrors={validationErrors}
 				/>
 			default:
-				return <Typography variant="h4" component={Link} to='/'>
-					Thank you for your submission. Return to homepage
-				</Typography>
+				return (
+					<div className={styles.submitted}>
+						<Alert severity="success" variant="filled">Thank you for your submission</Alert>
+						<Link to='/' className={styles.link}>Return to Homepage</Link>
+					</div>
+				)
 		}
 	}
 	

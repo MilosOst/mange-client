@@ -60,8 +60,8 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 					size="small"
 					value={review.rating ? review.rating : null} 
 					onChange={(e, value) => setRating(index, value)}
-					icon={<RatingFull />}
-					emptyIcon={<RatingEmpty />}
+					icon={<RatingFull height={50} width={50}/>}
+					emptyIcon={<RatingEmpty height={50} width={50}/>}
 				/>
 			</header>
 			<TextField

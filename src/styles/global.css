@@ -9,7 +9,7 @@
 }
 
 html, body, #root, .container {
-	min-height: 100%;
+	min-height: 100vh;
 }
 
 #root {
@@ -17,5 +17,18 @@ html, body, #root, .container {
 }
 
 .container {
+	display: flex;
+	flex-direction: column;
 	background-color: whitesmoke;
+	overflow-x: hidden;
+}
+
+.content {
+	flex: 1;
+}
+
+@media screen and (max-width: 568px) {
+	:root {
+		font-size: 14px;
+	}
 }
