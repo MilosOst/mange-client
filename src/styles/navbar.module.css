@@ -48,13 +48,23 @@
 .profileSection {
 	display: flex;
 	align-items: center;
-	gap: 1rem;			
+	gap: 1rem;
+	order: 1;	
 }
-
 
 .loginBtn, .logoutBtn {
 	color: brand-red !important;
 	background-color: white !important;
+}
+
+.menuItem {
+	align-items: center;
+	gap: 8px;
+}
+
+.menuIcon {
+	height: 32px;
+	width: 32px;
 }
 
 
@@ -88,5 +98,17 @@
 		display: flex;
 		flex-direction: column;
 		margin-top: 8px;
+	}
+
+	.navHeader {
+		order: 1;
+	}
+
+	.profileSection {
+		order: 2;
+	}
+
+	.navLinks {
+		order: 3;
 	}
 }

@@ -1,13 +1,25 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from '../styles/navbar.module.css';
-import { Button } from '@mui/material';
+import {
+	Button,
+	IconButton,
+	Avatar,
+	Menu,
+	MenuItem,
+	ListItemIcon
+} from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
 import menuIcon from '../images/menu.svg';
+import AddIcon from '@mui/icons-material/Add';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../contexts/AuthContext.js';
 
 function Navbar() {
-	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+	const { isLoggedIn, setIsLoggedIn, user } = useContext(AuthContext);
 	const [expanded, setExpanded] = useState(false);
+	const [anchorEl, setAnchorEl] = useState(null);
+	const open = Boolean(anchorEl);
 
 	let navigate = useNavigate();
 
@@ -15,6 +27,10 @@ function Navbar() {
 		localStorage.removeItem('token');
 		setIsLoggedIn(false);
 		navigate('/login');
+	};
+
+	const handleClick = (e) => {
+		setAnchorEl(e.currentTarget);
 	};
 
 	return (
@@ -33,13 +49,31 @@ function Navbar() {
 			<section className={`${styles.profileSection} ${expanded ? styles.expanded : ''}`}>
 				{isLoggedIn &&			
 					<>
-						<Button
-							variant='contained'
-							className={styles.logoutBtn}
-							onClick={logOut}
-							>
-							Sign Out
-						</Button>
+					<IconButton onClick={handleClick}>
+						<Avatar>M</Avatar>
+					</IconButton>
+					<Menu
+						anchorEl={anchorEl}
+						open={open}
+						onClose={() => setAnchorEl(null)}
+						onClick={() => setAnchorEl(null)}
+					>
+						<MenuItem sx={{ gap: '8px' }} component={Link} to={`/users/${user.username}`}>
+							<ListItemIcon className={styles.menuItem}>
+								<AccountCircleIcon className={styles.menuIcon} /> Profile
+							</ListItemIcon>
+						</MenuItem>
+						<MenuItem component={Link} to='/reviews/new'>
+							<ListItemIcon className={styles.menuItem}>
+								<AddIcon className={styles.menuIcon}/> Add Review
+							</ListItemIcon>
+						</MenuItem>
+						<MenuItem onClick={logOut}>
+							<ListItemIcon className={styles.menuItem}>
+								<Logout className={styles.menuIcon}/> Sign Out
+							</ListItemIcon>
+						</MenuItem>
+					</Menu>
 					</>
 				}
 

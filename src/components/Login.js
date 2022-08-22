@@ -11,8 +11,24 @@ function Login() {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 
-	const { setIsLoggedIn } = useContext(AuthContext);
+	const { setIsLoggedIn, setUser } = useContext(AuthContext);
 	const navigate = useNavigate();
+
+	const getCurrentUser = async () => {
+		try {
+			const res = await axios.get('http://localhost:3000/v1/users/currentUser', {
+				headers: {
+					Authorization: localStorage.getItem('token'),
+				}
+			});
+			setIsLoggedIn(true);
+			setUser(res.data.user);
+		} catch (err) {
+			setIsLoggedIn(false);
+			setUser(null);
+			localStorage.removeItem('token');
+		}
+	};
 
 	const loginUser = async (e) => {
 		e.preventDefault();
@@ -26,7 +42,9 @@ function Login() {
 			const { data } = res;
 			localStorage.setItem('token', data.token);
 			setError(null);
-			setIsLoggedIn(true);
+			
+			// Get user info
+			await getCurrentUser();
 			navigate('/');
 		} catch (err) {
 			const { response } = err;

@@ -11,20 +11,21 @@ import Profile from './components/Profile.js';
 
 function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState(null);
 
 	const verifyAuth = async () => {
 		try {
-			await axios.get('http://localhost:3000/v1/isUserAuth', {
+			const res = await axios.get('http://localhost:3000/v1/users/currentUser', {
 				headers: {
 					Authorization: localStorage.getItem('token'),
 				}
 			});
 			setIsLoggedIn(true);
-			return true;
+			setUser(res.data.user);
 		} catch (err) {
 			setIsLoggedIn(false);
+			setUser(null);
 			localStorage.removeItem('token');
-			return false;
 		}
 	};
 
@@ -33,7 +34,7 @@ function App() {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, verifyAuth }}>
+		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, verifyAuth, user, setUser }}>
 			<div className='container'>
 				<Navbar />
 				<main className='content'>
@@ -42,7 +43,7 @@ function App() {
 						<Route path='/sign-up' element={<SignUp/>}/>
 						<Route path='/login' element={<Login />} />
 						<Route path='/users/:username/' element={<Profile/>}/>
-						<Route path='/review' element={<PrivateRoute/>}>
+						<Route path='/reviews' element={<PrivateRoute/>}>
 							<Route path='new' element={<ReviewForm/>} />
 						</Route>
 					</Routes>
