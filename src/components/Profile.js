@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../styles/profile.module.css';
 import {
 	Avatar,
@@ -10,11 +11,15 @@ import {
 	Box, 
 	Container, 
 	Typography,
-} from "@mui/material";
-import RestaurantReview from "./RestaurantReview.js";
-import { AuthContext } from "../contexts/AuthContext.js";
-import UsersListModal from "./UsersListModal.js";
+} from '@mui/material';
+import RestaurantReview from './RestaurantReview.js';
+import NotFound from './auth/NotFound.js';
+import { AuthContext } from '../contexts/AuthContext.js';
+import UsersListModal from './UsersListModal.js';
 
+const headers = {
+	Authorization: localStorage.getItem('token')
+};
 
 function Profile() {
 	const params = useParams();
@@ -28,8 +33,8 @@ function Profile() {
 	const [selectedTab, setSelectedTab] = useState('All');
 
 	// State variables to keep track of followers/following if api should be called to fetch more info
-	const [followers, setFollowers] = useState(null);
-	const [following, setFollowing] = useState(null);
+	const [followers, setFollowers] = useState([]);
+	const [following, setFollowing] = useState([]);
 	const [followersSkip, setFollowersSkip] = useState(0);
 	const [followingSkip, setFollowingSkip] = useState(0);
 	const [isAllFollowers, setIsAllFollowers] = useState(false);
@@ -39,9 +44,9 @@ function Profile() {
 	const [followingOpen, setFollowingOpen] = useState(false);
 
 	const [notFound, setNotFound] = useState(false);
-	const [errorOcurred, setErrorOccured] = useState(false);
+	const [errorOccurred, setErrorOccured] = useState(false);
 
-	const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
+	const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
 	// Reset state when navigating to different profile pages
 	const resetState = () => {
@@ -49,8 +54,8 @@ function Profile() {
 		setIsFollowing(false);
 		setIsCurrentUser(false);
 		setSelectedTab('All');
-		setFollowers(null);
-		setFollowing(null);
+		setFollowers([]);
+		setFollowing([]);
 		setFollowersOpen(false);
 		setFollowingOpen(false);
 		setFollowersSkip(0);
@@ -59,136 +64,108 @@ function Profile() {
 		setIsAllFollowing(false);
 	};
 
+	const fetchUserProfile = async () => {
+		try {
+			const res = await axios.get(`http://localhost:3000/v1/users/${username}/profile`, { headers });
+			const { data } = res;
+
+			setUser(data.user);
+			setIsFollowing(data.isFollowing);
+			setIsCurrentUser(data.isCurrentUser);
+		} catch (err) {
+
+			setNotFound(true);
+			setErrorOccured(true);
+		}
+	};
+
 	useEffect(() => {
 		resetState();
-		const fetchUserInfo = async () => {
-			const request = await fetch(`http://localhost:3000/v1/users/${params.username}/profile`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: localStorage.getItem('token'),
-				}
-			});
-
-			if (request.status === 404) {
-				setNotFound(true);
-				return;
-			} 
-			else if (request.status === 200) {
-				const data = await request.json();
-				setUser(data.user);
-				setIsFollowing(data.isFollowing);
-				setIsCurrentUser(data.isCurrentUser);
-			}
-			else {
-				setErrorOccured(true);
-			}
-		}	
-
-		fetchUserInfo();
+		fetchUserProfile();
 	}, [username]);
+
+	const unfollowUser = async () => {
+		try {
+			await axios.delete(`http://localhost:3000/v1/users/${username}/followers`, { headers });
+			setIsFollowing(false);
+			setUser({
+				...user,
+				followerCount: user.followerCount - 1,
+			});
+		} catch (err) {
+			return;
+		}
+	};
+	
+	const followUser = async () => {
+		try {
+			const res = await axios.post(`http://localhost:3000/v1/users/${username}/followers`, null, { headers });
+
+			setIsFollowing(res.data.isFollowing);
+			setUser({
+				...user,
+				followerCount: user.followerCount + 1,
+			});
+		} catch (err) {
+			return;
+		}
+	};
 
 	const handleFollow = async () => {
 		if (!isLoggedIn) {
 			navigate('/login');
 		}
 		else if (isFollowing) {
-			// Unfollow if already following
-			const request = await fetch(`http://localhost:3000/v1/users/${username}/followers`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: localStorage.getItem('token'),
-				}
-			});
-
-			if (request.status === 200 || request.status === 204) {
-				setIsFollowing(false);
-				setUser({
-					...user,
-					followerCount: user.followerCount - 1,
-				});
-			}
+			await unfollowUser();
 		}
 		else {
-			const request = await fetch(`http://localhost:3000/v1/users/${username}/followers`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: localStorage.getItem('token'),
-				}
-			});
-
-			if (request.status === 201) {
-				const data = await request.json();
-				setIsFollowing(data.isFollowing);
-				setUser({
-					...user,
-					followerCount: user.followerCount + 1
-				});
-			}
+			await followUser();
 		}
 	};
 
 	const fetchFollowers = async () => {
-		const request = await fetch(`http://localhost:3000/v1/users/${username}/followers?skip=${followersSkip}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: localStorage.getItem('token'),
-			}
-		});
+		try {
+			const res = await axios.get(`http://localhost:3000/v1/users/${username}/followers?skip=${followersSkip}`, { headers });
 
-		if (request.status === 401) {
-			navigate('/login');
-		}
-		else if (request.status === 200) {
-			const data = await request.json();
-
-			// Check if all followers have been fetched
+			const { data } = res;
 			if (data.followers.length === 0) {
 				setIsAllFollowers(true);
 			}
-			const followerList = followers ? followers : [];
-			setFollowers([...followerList, ...data.followers]);
+			// Set current followers to empty array if followers haven't been fetched yet
+			setFollowers([...followers, ...data.followers]);
+		} catch (err) {
+			if (err.response.status === 401) navigate('/login');
 		}
-	}
+	};
 
 	const handleFollowersOpen = async () => {
 		// Check if followers have been fetched already, null/undefined indicates that they haven't
-		if (followers == null) {
+		if (followers.length === 0) {
 			await fetchFollowers();
 		}
 		setFollowersOpen(true);
 	};
 
 	const fetchFollowing = async () => {
-		const request = await fetch(`http://localhost:3000/v1/users/${username}/following?skip=${followingSkip}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: localStorage.getItem('token'),
-			}
-		});
-
-		if (request.status === 401) {
-			navigate('/login');
-		}
-		else if (request.status === 200) {
-			const data = await request.json();
-
-			// Check if all following users have been fetched
+		try {
+			const res = await axios.get(`http://localhost:3000/v1/users/${username}/following?skip=${followingSkip}`, { headers });
+			
+			const { data } = res;
 			if (data.following.length === 0) {
 				setIsAllFollowing(true);
 			}
+
+			// Set current following to empty array if followers haven't been fetched yet
 			const followingList = following ? following : [];
 			setFollowing([...followingList, ...data.following]);
+		} catch (err) {
+			if (err.response.status === 401) navigate('/login');
 		}
-	}
+	};
 
 	const handleFollowingOpen = async () => {
 		// Check if following has been fetched already, null/undefined indicates no fetch yet
-		if (following == null) {
+		if (following.length === 0) {
 			await fetchFollowing();
 		}
 		setFollowingOpen(true);
@@ -196,24 +173,24 @@ function Profile() {
 
 	// Infinite scroll fetch for followers
 	useEffect(() => {
-		// Check if followers is null to prevent automatic fetch on render
-		if (!isAllFollowers && followers != null) {
+		// Don't fetch if change is due to initial render reset
+		if (!isAllFollowers && followersSkip !== 0) {
 			fetchFollowers();
 		}
 	}, [followersSkip]);
 
 	// Infinite scroll fetch for following
 	useEffect(() => {
-		// Check if following is null to prevent automatic fetch on render
-		if (!isAllFollowing && following != null) {
+		// Don't fetch if change is due to initial render reset
+		if (!isAllFollowing && followingSkip !== 0) {
 			fetchFollowing();
 		}
-	}, [followingSkip])
+	}, [followingSkip]);
 
 	if (notFound) {
-		return <div>Page not Found</div>;
+		return <NotFound />;
 	} 
-	else if (errorOcurred) {
+	else if (errorOccurred) {
 		return <div>Sorry, an error occured</div>;
 	}
 	else {
@@ -221,7 +198,7 @@ function Profile() {
 			<div>
 				<div className={styles.profileMain}>
 					<Paper sx={{ padding: '0.6rem' }}>
-						<Typography variant="h5" align="center">{user && user.username}</Typography>
+						<Typography variant='h5' align='center'>{user && user.username}</Typography>
 						<div className={styles.profileHeader}>
 							<Avatar
 								src='placeholder'
@@ -261,13 +238,13 @@ function Profile() {
 						<section className={styles.userActions}>
 							{isCurrentUser ? (
 								<Button
-									variant="contained"
+									variant='contained'
 									className={`${styles.profileBtn}`}>
 									Edit Profile
 								</Button>
 							) :
 								(<Button
-									variant="contained"
+									variant='contained'
 									className={`${styles.profileBtn} ${isFollowing ? styles.following : ''}`}
 									onClick={handleFollow}>
 									{isFollowing ? 'Following' : 'Follow'}
@@ -294,8 +271,7 @@ function Profile() {
 				</div>
 			</div>
 		);
-	}
-	
+	}	
 }
 
 export default Profile;

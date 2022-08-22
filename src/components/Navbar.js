@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../styles/navbar.module.css';
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import menuIcon from '../images/menu.svg';
-import { AuthContext } from "../contexts/AuthContext.js";
+import { AuthContext } from '../contexts/AuthContext.js';
 
 function Navbar() {
 	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -15,14 +15,14 @@ function Navbar() {
 		localStorage.removeItem('token');
 		setIsLoggedIn(false);
 		navigate('/login');
-	}
+	};
 
 	return (
 		<nav className={styles.navbar}>
 			<header className={styles.navHeader}>
 				<h2 className={styles.brandTitle}>Mange</h2>
 				<button className={styles.menuBtn} onClick={() => setExpanded(!expanded)}>
-					<img src={menuIcon} alt="Toggle Menu" />
+					<img src={menuIcon} alt='Toggle Menu' />
 				</button>
 			</header>
 			<ul className={`${styles.navLinks} ${expanded ? styles.expanded : ''}`}>
@@ -34,7 +34,7 @@ function Navbar() {
 				{isLoggedIn &&			
 					<>
 						<Button
-							variant="contained"
+							variant='contained'
 							className={styles.logoutBtn}
 							onClick={logOut}
 							>
@@ -46,14 +46,14 @@ function Navbar() {
 				{!isLoggedIn &&
 				<>
 					<Button
-						variant="outlined"
+						variant='outlined'
 						component={Link}
 						to='/sign-up'
 						sx={{ color: 'white', borderColor: 'white' }}>
 						Sign Up
 					</Button>
 					<Button
-						variant="contained"
+						variant='contained'
 						component={Link}
 						to='/login'
 						className={styles.loginBtn}>

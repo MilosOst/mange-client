@@ -1,3 +1,5 @@
+@value brand-red from './colors.css';
+
 .authForm {
 	text-align: center;
 	width: min(500px, 90vw);
@@ -54,6 +56,7 @@
 
 .submitBtn {
 	width: 100%;
+	background-color: brand-red !important;
 }
 
 .errors {

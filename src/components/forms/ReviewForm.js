@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import { Container, Stepper, Step, StepLabel, Paper, Button, Alert } from "@mui/material";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Container, Stepper, Step, StepLabel, Paper, Button, Alert } from '@mui/material';
 import styles from '../../styles/reviewform.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import ReviewStepOne from "./ReviewStepOne.js";
-import ReviewStepTwo from "./ReviewStepTwo.js";
+import ReviewStepOne from './ReviewStepOne.js';
+import ReviewStepTwo from './ReviewStepTwo.js';
 
+const headers = {
+	Authorization: localStorage.getItem('token')
+};
 
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -24,21 +28,15 @@ function ReviewForm() {
 
 	const getSteps = () => {
 		return ['Choose Restaurant', 'Add Reviews'];
-	}
+	};
 
 	const getRestaurantDishes = async () => {
-		const request = await fetch(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/menu`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			}
-		});
-
-		if (request.status === 200) {
-			const data = await request.json();
-			return data.menu;
+		try {
+			const res = await axios.get(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/menu`);
+			return res.data.menu;
+		} catch (err) {
+			return [];
 		}
-		return [];
 	};
 
 	const handleNext = async (e) => {
@@ -59,31 +57,23 @@ function ReviewForm() {
 				return;
 			}
 
-			const request = await fetch(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': localStorage.getItem('token'),
-				},
-				body: JSON.stringify({
+			try {
+				const payload = {
 					restaurant: selectedRestaurant,
 					reviews,
 					review_title: reviewTitle,
-				}),
-			});
+				};
 
-			console.log(request.status)
-
-			if (request.status === 201) {
-				setActiveStep(prevNum => prevNum + 1);
-				return;
-			}
-			else if (request.status === 401) {
-				navigate('/login');
-			}
-			else {
-				const data = await request.json();
-				setValidationErrors(data.errors);
+				await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, payload, { headers });
+				setActiveStep(prevStep => prevStep + 1);
+			} catch (err) {
+				const { response } = err;
+				if (response.status === 401) {
+					navigate('/login');
+				}
+				else if (response.status === 400) {
+					setValidationErrors(response.data.errors);
+				}
 			}
 		}
 	};
@@ -103,7 +93,7 @@ function ReviewForm() {
 					restaurants={restaurants}
 					setRestaurants={setRestaurants}
 					selectedRestaurant={selectedRestaurant}
-					setSelectedRestaurant={setSelectedRestaurant} />
+					setSelectedRestaurant={setSelectedRestaurant} />;
 			case 1:
 				return <ReviewStepTwo
 					reviews={reviews}
@@ -113,20 +103,17 @@ function ReviewForm() {
 					reviewTitle={reviewTitle}
 					setReviewTitle={setReviewTitle}
 					validationErrors={validationErrors}
-				/>
+				/>;
 			default:
 				return (
 					<div className={styles.submitted}>
-						<Alert severity="success" variant="filled">Thank you for your submission</Alert>
+						<Alert severity='success' variant='filled'>Thank you for your submission</Alert>
 						<Link to='/' className={styles.link}>Return to Homepage</Link>
 					</div>
-				)
+				);
 		}
-	}
+	};
 	
-
-
-
 	return (
 		<Container maxWidth='lg'>
 			<Paper className={styles.form}>
@@ -135,13 +122,13 @@ function ReviewForm() {
 						return <Step
 									key={label}
 									sx={{
-									"& .MuiStepIcon-root.Mui-active": { color: '#d91426' },
-									"& .MuiStepIcon-root.Mui-completed": { color: '#d91426' }
+									'& .MuiStepIcon-root.Mui-active': { color: '#d91426' },
+									'& .MuiStepIcon-root.Mui-completed': { color: '#d91426' }
 									}}>
 									<StepLabel>
 										{label}
 									</StepLabel>
-								</Step>
+								</Step>;
 					})}
 				</Stepper>
 				<br />
@@ -150,7 +137,7 @@ function ReviewForm() {
 					<div className={styles.progSection}>
 						{activeStep === 1 &&
 							<Button
-								variant="outlined"
+								variant='outlined'
 								onClick={handleBack}
 								className={styles.backBtn}>
 								Back
@@ -159,7 +146,7 @@ function ReviewForm() {
 						{activeStep < getSteps().length &&
 							<Button
 								type='submit'
-								variant="contained"
+								variant='contained'
 								className={styles.nextBtn}>
 								{activeStep === getSteps().length - 1 ? 'Post Review' : 'Next'}
 							</Button>
@@ -167,8 +154,6 @@ function ReviewForm() {
 					</div>
 				</form>
 			</Paper>
-
-			
 		</Container>
 	);
 }

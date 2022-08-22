@@ -1,7 +1,7 @@
-import React from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Rating } from "@mui/material";
-import RatingFull from "./forms/RatingFull.js";
-import RatingEmpty from "./forms/RatingEmpty.js";
+import React from 'react';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Rating } from '@mui/material';
+import RatingFull from './forms/RatingFull.js';
+import RatingEmpty from './forms/RatingEmpty.js';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import styles from '../styles/profile.module.css';
@@ -14,7 +14,7 @@ function DishReviewPost({ review }) {
 				<header className={styles.dishReviewHeader}>
 					<div>
 						<RestaurantMenuIcon/>
-						<Typography variant="subtitle1">{review.dish.name}</Typography>
+						<Typography variant='subtitle1'>{review.dish.name}</Typography>
 					</div>
 					<Rating
 						size='small'
@@ -30,7 +30,6 @@ function DishReviewPost({ review }) {
 			</AccordionDetails>
 		</Accordion>
 	);
-	
 }
 
 export default DishReviewPost;

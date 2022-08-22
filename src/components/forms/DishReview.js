@@ -10,7 +10,6 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 
 	return (
 		<Card variant='outlined' sx={{ padding: '2rem' }} className={styles.dishReview}>
-			<div onClick={() => console.log(review)}>Cad</div>
 			<header className={styles.reviewHeader}>
 				<Autocomplete
 					className={styles.selectDish}
@@ -18,8 +17,8 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 					onChange={(e, value) => {
 						// Check if this is a new dish given by the user
 						if (value && value.inputValue) {
-							setAvailableDishes([...availableDishes, { name: value.inputValue }])
-							setDish(index, {name: value.inputValue});
+							setAvailableDishes([...availableDishes, { name: value.inputValue }]);
+							setDish(index, { name: value.inputValue });
 						}
 						else {
 							setDish(index, value);
@@ -32,7 +31,7 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 						// Add option to create new value
 						const isExisting = options.some((option) => inputValue.toLowerCase() === option.name.toLowerCase());
 						if (inputValue !== '' && !isExisting) {
-							filtered.push({ inputValue, name: `Add "${inputValue}"` });
+							filtered.push({ inputValue, name: `Add '${inputValue}'` });
 						}
 
 						return filtered;
@@ -52,12 +51,12 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 							key={option.name}
 							variant='outlined'
 							required
-						/>
+						/>;
 					}}
 					
 				/>
 				<Rating
-					size="small"
+					size='small'
 					value={review.rating ? review.rating : null} 
 					onChange={(e, value) => setRating(index, value)}
 					icon={<RatingFull height={50} width={50}/>}
@@ -72,11 +71,11 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 				multiline
 				minRows={2}
 			/>
-			<Typography variant="h5">Add Photos</Typography>
+			<Typography variant='h5'>Add Photos</Typography>
 			<TextField 
 				type='file' 
 				variant='outlined' 
-				inputProps={{ accept: ".jpg, .png, .jpeg", multiple: true}}/>
+				inputProps={{ accept: '.jpg, .png, .jpeg', multiple: true }}/>
 			<IconButton onClick={() => removeReview(index)}>
 				<DeleteIcon />
 			</IconButton>

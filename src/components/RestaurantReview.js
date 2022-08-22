@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import styles from '../styles/profile.module.css';
-import { Button, Card, Typography } from "@mui/material";
+import { Button, Card, Typography } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import DishReviewPost from "./DishReviewPost.js";
-import moment from "moment";
+import DishReviewPost from './DishReviewPost.js';
+import moment from 'moment';
 
 function RestaurantReview({ restaurantReview }) {
 	return (
@@ -24,7 +24,7 @@ function RestaurantReview({ restaurantReview }) {
 			</div>
 			<ul className={styles.dishReviews}>
 				{restaurantReview && restaurantReview.dishReviews.map((dishReview) => {
-					return <DishReviewPost key={dishReview._id} review={dishReview} />
+					return <DishReviewPost key={dishReview._id} review={dishReview} />;
 				})}
 			</ul>
 			<section className={styles.reviewActions}>

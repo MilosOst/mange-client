@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Paper } from "@mui/material";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Paper } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import styles from '../styles/authforms.module.css';
 
 function SignUp() {
@@ -15,31 +16,22 @@ function SignUp() {
 
 	const registerUser = async (e) => {
 		e.preventDefault();
-
-		const request = await fetch('http://localhost:3000/v1/register', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
+		
+		try {
+			const res = await axios.post('http://localhost:3000/v1/register', {
 				email,
 				username,
 				password1,
-				password2,
-			})
-		});
+				password2
+			});
 
-		const data = await request.json();
-
-		if (request.status !== 201) {
-			setErrors(data.errors);
-			return;
+			if (res.status === 201) {
+				navigate('/login');
+			}
+		} catch (err) {
+			setErrors(err.response.data.errors);
 		}
-		else {
-			setErrors([]);
-			navigate('/login');
-		}
-	}
+	};
 
 	return (
 		<Paper className={styles.authForm}>
@@ -47,9 +39,9 @@ function SignUp() {
 			<p>Already have an account? <Link to='/login' className={styles.accountLink}>Log In</Link></p>
 			<form className={styles.formContent} onSubmit={registerUser}>
 				<div className={styles.formGroup}>
-					<label htmlFor="email" className={styles.formLabel}>Email</label>
+					<label htmlFor='email' className={styles.formLabel}>Email</label>
 					<input
-						type="email"
+						type='email'
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 						name='email'
@@ -59,9 +51,9 @@ function SignUp() {
 					/>
 				</div>
 				<div className={styles.formGroup}>
-					<label htmlFor="username" className={styles.formLabel}>Username</label>
+					<label htmlFor='username' className={styles.formLabel}>Username</label>
 					<input
-						type="text"
+						type='text'
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
 						name='username'
@@ -71,7 +63,7 @@ function SignUp() {
 					/>
 				</div>
 				<div className={styles.formGroup}>
-					<label htmlFor="password1" className={styles.formLabel}>Password</label>
+					<label htmlFor='password1' className={styles.formLabel}>Password</label>
 					<input
 						type='password'
 						value={password1}
@@ -83,7 +75,7 @@ function SignUp() {
 					/>
 				</div>
 				<div className={styles.formGroup}>
-					<label htmlFor="password2" className={styles.formLabel}>Confirm Password</label>
+					<label htmlFor='password2' className={styles.formLabel}>Confirm Password</label>
 					<input
 						type='password'
 						value={password2}
@@ -97,11 +89,11 @@ function SignUp() {
 				{errors && 
 				<ul className={styles.errors}>
 					{errors.map((error) => {
-						return <li key={error.msg}>{error.msg}</li>
+						return <li key={error.msg}>{error.msg}</li>;
 					})}
 				</ul>
 				}
-				<Button variant="contained" className={styles.submitBtn} type='submit'>Sign Up</Button>
+				<Button variant='contained' className={styles.submitBtn} type='submit'>Sign Up</Button>
 			</form>
 		</Paper>
 	);

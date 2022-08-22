@@ -18,6 +18,12 @@
         "react"
     ],
     "rules": {
-        "react/prop-types": 0
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "linebreak-style": ["error", "unix"],
+        "no-console": 1,
+        "no-multiple-empty-lines": ["error", { "max": 1 }],
+        "react/prop-types": 0,
+        "object-curly-spacing": ["warn", "always"]
     }
 }

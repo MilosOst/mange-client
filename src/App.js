@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar.js';
 import SignUp from './components/SignUp.js';
@@ -11,29 +12,28 @@ import Profile from './components/Profile.js';
 function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	useEffect(() => {
-		const verifyAuth = async () => {
-			const request = await fetch('http://localhost:3000/v1/isUserAuth', {
-				method: 'GET',
+	const verifyAuth = async () => {
+		try {
+			await axios.get('http://localhost:3000/v1/isUserAuth', {
 				headers: {
 					Authorization: localStorage.getItem('token'),
 				}
 			});
-
-			if (request.status !== 200) {
-				setIsLoggedIn(false);
-				localStorage.removeItem('token');
-			}
-			else {
-				setIsLoggedIn(true);
-			}
+			setIsLoggedIn(true);
+			return true;
+		} catch (err) {
+			setIsLoggedIn(false);
+			localStorage.removeItem('token');
+			return false;
 		}
-		
+	};
+
+	useEffect(() => {
 		verifyAuth();
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, }}>
+		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, verifyAuth }}>
 			<div className='container'>
 				<Navbar />
 				<main className='content'>

@@ -24,6 +24,8 @@ html, body, #root, .container {
 }
 
 .content {
+	display: flex;
+	flex-direction: column;
 	flex: 1;
 }
 

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Typography, Button, TextField } from "@mui/material";
+import React, { useState } from 'react';
+import { Typography, Button, TextField } from '@mui/material';
 import styles from '../../styles/reviewform.module.css';
-import DishReview from "./DishReview.js";
+import DishReview from './DishReview.js';
 
 function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, validationErrors }) {
 	const [error, setError] = useState(null);
@@ -43,9 +43,9 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 	return (
 		<div className={styles.stepTwo}>
 			<header className={styles.formHeader}>
-				<Typography variant="h5">Add Dish Reviews</Typography>
+				<Typography variant='h5'>Add Dish Reviews</Typography>
 				<Button
-					variant="contained"
+					variant='contained'
 					className={styles.addBtn}
 					onClick={addReview}>
 					Add Dish
@@ -70,7 +70,7 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 						index={index}
 						availableDishes={availableDishes}
 						setAvailableDishes={setAvailableDishes}
-						/>
+						/>;
 				})}
 			</ul>
 			<p className={styles.error}>{error}</p>

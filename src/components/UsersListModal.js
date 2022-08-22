@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	Dialog, 
 	DialogContent, 
@@ -9,26 +9,26 @@ import {
 	ListItemAvatar,
 	ListItemText,
 	Avatar
-} from "@mui/material";
-import { Link } from 'react-router-dom'
+} from '@mui/material';
+import { Link } from 'react-router-dom';
 import styles from '../styles/userslist.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 function UsersListModal({ open, setOpen, title, users, setSkip }) {
 	
 	const handleScroll = (e) => {
-		const {offsetHeight, scrollTop, scrollHeight } = e.target;
+		const { offsetHeight, scrollTop, scrollHeight } = e.target;
 
 		if (offsetHeight + scrollTop >= scrollHeight) {
-			setSkip(users ? users.length : 0)
+			setSkip(users ? users.length : 0);
 		}
-	}
+	};
 
 	return (
 		<Dialog open={open} onClose={() => setOpen(false)} maxWidth='xl'>
 			<DialogContent className={styles.modal}>
 				<header className={styles.header}>
-					<Typography variant="h6">{title}</Typography>
+					<Typography variant='h6'>{title}</Typography>
 					<IconButton  
 						onClick={() => setOpen(false)}
 						sx={{ position: 'absolute', top: '10px', right: '10px', width: '24px', height: '24px' }}
@@ -46,12 +46,12 @@ function UsersListModal({ open, setOpen, title, users, setSkip }) {
 								</ListItemAvatar>
 								<ListItemText>{user.username}</ListItemText>
 						</ListItem>
-						)
+						);
 					})}
 				</List>
 			</DialogContent>
 		</Dialog>
-	)
+	);
 }
 
 export default UsersListModal;
