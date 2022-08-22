@@ -1,0 +1,28 @@
+@value light-gray: #5c5c5c;
+
+.modal {
+	padding: 1rem;
+	position: relative;
+}
+
+.header {
+	text-align: center;
+	border-bottom: 1px solid light-gray;
+	padding: 6px;
+}
+
+.usersList {
+	overflow-y: auto;
+	max-height: 130px;
+}
+
+.link {
+	color: black;
+}
+
+
+@media screen and (min-width: 375px) {
+	.modal {
+		width: 300px;
+	}
+}

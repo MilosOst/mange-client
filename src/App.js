@@ -41,7 +41,7 @@ function App() {
 						<Route path='/' element={<h1>Home</h1>}/>
 						<Route path='/sign-up' element={<SignUp/>}/>
 						<Route path='/login' element={<Login />} />
-						<Route path='/users/:username/' element={<Profile />}/>
+						<Route path='/users/:username/' element={<Profile/>}/>
 						<Route path='/review' element={<PrivateRoute/>}>
 							<Route path='new' element={<ReviewForm/>} />
 						</Route>
