@@ -50,7 +50,7 @@ function Navbar() {
 				{isLoggedIn &&			
 					<>
 					<IconButton onClick={handleClick}>
-						<Avatar>M</Avatar>
+						<Avatar src={user.profilePicURL} />
 					</IconButton>
 					<Menu
 						anchorEl={anchorEl}

@@ -16,6 +16,7 @@ import RestaurantReview from './RestaurantReview.js';
 import NotFound from './auth/NotFound.js';
 import { AuthContext } from '../contexts/AuthContext.js';
 import UsersListModal from './UsersListModal.js';
+import EditProfile from './EditProfile.js';
 
 const headers = {
 	Authorization: localStorage.getItem('token')
@@ -72,6 +73,7 @@ function Profile() {
 			setUser(data.user);
 			setIsFollowing(data.isFollowing);
 			setIsCurrentUser(data.isCurrentUser);
+			console.log(res);
 		} catch (err) {
 
 			setNotFound(true);
@@ -133,6 +135,7 @@ function Profile() {
 			}
 			// Set current followers to empty array if followers haven't been fetched yet
 			setFollowers([...followers, ...data.followers]);
+			console.log(data.followers);
 		} catch (err) {
 			if (err.response.status === 401) navigate('/login');
 		}
@@ -201,7 +204,7 @@ function Profile() {
 						<Typography variant='h5' align='center'>{user && user.username}</Typography>
 						<div className={styles.profileHeader}>
 							<Avatar
-								src='placeholder'
+								src={user ? user.profilePicURL: ''}
 								sx={{ width: '5rem', height: '5rem', backgroundColor: '#d91426' }}
 								alt={username}
 							/>
@@ -235,13 +238,13 @@ function Profile() {
 								/>
 							</section>
 						</div>
+						{user && <p className={styles.bio}>{user.bio}</p>}
 						<section className={styles.userActions}>
 							{isCurrentUser ? (
-								<Button
-									variant='contained'
-									className={`${styles.profileBtn}`}>
-									Edit Profile
-								</Button>
+								<>
+									<EditProfile currUser={user} setCurrUser={setUser}/>
+								</>
+								
 							) :
 								(<Button
 									variant='contained'

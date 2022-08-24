@@ -42,7 +42,7 @@ function UsersListModal({ open, setOpen, title, users, setSkip }) {
 						return (
 							<ListItem component={Link} to={`/users/${user.username}`} key={user._id} className={styles.link}>
 								<ListItemAvatar>
-									<Avatar src={`users/${user.username}`} alt={user.username} sx={{ width: '45px', height: '45px', backgroundColor: '#d91426' }}/>
+									<Avatar src={user ? user.profilePicURL: ''} alt={user.username} sx={{ width: '45px', height: '45px', backgroundColor: '#d91426' }}/>
 								</ListItemAvatar>
 								<ListItemText>{user.username}</ListItemText>
 						</ListItem>

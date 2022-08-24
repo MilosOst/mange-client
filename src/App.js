@@ -8,6 +8,7 @@ import { AuthContext } from './contexts/AuthContext.js';
 import ReviewForm from './components/forms/ReviewForm.js';
 import PrivateRoute from './components/auth/PrivateRoute.js';
 import Profile from './components/Profile.js';
+import ImageUpload from './components/ImageUpload.js';
 
 function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,6 +47,7 @@ function App() {
 						<Route path='/reviews' element={<PrivateRoute/>}>
 							<Route path='new' element={<ReviewForm/>} />
 						</Route>
+						<Route path='/upload' element={<ImageUpload />} />
 					</Routes>
 				</main>
 			</div>

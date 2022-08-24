@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.js';
 
 function PrivateRoute() {
-	const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+	const { isLoggedIn, setIsLoggedIn, setUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const verifyIsLoggedIn = async () => {
@@ -19,6 +19,7 @@ function PrivateRoute() {
 			setIsLoggedIn(true);
 		} catch (err) {
 			setIsLoggedIn(false);
+			setUser(null);
 			localStorage.removeItem('token');
 			navigate('/login');
 		}
