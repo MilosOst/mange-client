@@ -5,7 +5,7 @@ import RatingFull from './RatingFull';
 import RatingEmpty from './RatingEmpty';
 import styles from '../../styles/reviewform.module.css';
 
-function DishReview({ review, removeReview, index, setDish, setOpinion, setRating, availableDishes, setAvailableDishes }) {
+function DishReview({ review, removeReview, index, setDish, setOpinion, setRating, availableDishes, setAvailableDishes, handleImages }) {
 	const filter = createFilterOptions();
 
 	return (
@@ -75,7 +75,9 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 			<TextField 
 				type='file' 
 				variant='outlined' 
-				inputProps={{ accept: '.jpg, .png, .jpeg', multiple: true }}/>
+				inputProps={{ accept: '.jpg, .png, .jpeg', multiple: true }}
+				onChange={(e) => handleImages(index, e.target.files)}
+			/>
 			<IconButton onClick={() => removeReview(index)}>
 				<DeleteIcon />
 			</IconButton>

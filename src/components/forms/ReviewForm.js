@@ -6,10 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReviewStepOne from './ReviewStepOne.js';
 import ReviewStepTwo from './ReviewStepTwo.js';
 
-const headers = {
-	Authorization: localStorage.getItem('token')
-};
-
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
 	const navigate = useNavigate();
@@ -23,6 +19,7 @@ function ReviewForm() {
 	// Step Two props
 	const [validationErrors, setValidationErrors] = useState(null);
 	const [reviews, setReviews] = useState([{}]);
+	const [images, setImages] = useState([]);
 	const [reviewTitle, setReviewTitle] = useState('');
 	const [availableDishes, setAvailableDishes] = useState([]);
 
@@ -36,6 +33,37 @@ function ReviewForm() {
 			return res.data.menu;
 		} catch (err) {
 			return [];
+		}
+	};
+
+	const submitReview = async () => {
+		try {
+			const headers = {
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'multipart/form-data',
+			};
+			const formData = new FormData();
+			formData.append('reviews', JSON.stringify(reviews));
+			formData.append('review_title', JSON.stringify(reviewTitle));
+			formData.append('restaurant', JSON.stringify(selectedRestaurant));
+
+			// Append images
+			images.forEach((group, index) => {
+				Object.keys(group).forEach((image) => {
+					formData.append(`images[${index}]`, group[image]);
+				});
+			});
+
+			await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
+			setActiveStep(prevStep => prevStep + 1);
+		} catch (err) {
+			const { response } = err;
+			if (response.status === 401) {
+				navigate('/login');
+			}
+			else if (response.status === 400) {
+				setValidationErrors(response.data.errors);
+			}
 		}
 	};
 
@@ -56,25 +84,7 @@ function ReviewForm() {
 				setValidationErrors([ { msg: 'You must select a rating for each review.' } ]);
 				return;
 			}
-
-			try {
-				const payload = {
-					restaurant: selectedRestaurant,
-					reviews,
-					review_title: reviewTitle,
-				};
-
-				await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, payload, { headers });
-				setActiveStep(prevStep => prevStep + 1);
-			} catch (err) {
-				const { response } = err;
-				if (response.status === 401) {
-					navigate('/login');
-				}
-				else if (response.status === 400) {
-					setValidationErrors(response.data.errors);
-				}
-			}
+			await submitReview();
 		}
 	};
 
@@ -103,6 +113,8 @@ function ReviewForm() {
 					reviewTitle={reviewTitle}
 					setReviewTitle={setReviewTitle}
 					validationErrors={validationErrors}
+					images={images}
+					setImages={setImages}
 				/>;
 			default:
 				return (

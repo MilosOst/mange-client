@@ -3,7 +3,7 @@ import { Typography, Button, TextField } from '@mui/material';
 import styles from '../../styles/reviewform.module.css';
 import DishReview from './DishReview.js';
 
-function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, validationErrors }) {
+function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, validationErrors, images, setImages }) {
 	const [error, setError] = useState(null);
 	
 	const addReview = () => {
@@ -40,6 +40,12 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 		setReviews(copy);
 	};
 
+	const handleImages = (index, newImages) => {
+		const copy = [...images];
+		copy[index] = newImages;
+		setImages(copy);
+	};
+
 	return (
 		<div className={styles.stepTwo}>
 			<header className={styles.formHeader}>
@@ -70,13 +76,14 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 						index={index}
 						availableDishes={availableDishes}
 						setAvailableDishes={setAvailableDishes}
+						handleImages={handleImages}
 						/>;
 				})}
 			</ul>
 			<p className={styles.error}>{error}</p>
 			{validationErrors && 
 				<ul style={{ listStyle: 'none' }}>
-					{validationErrors.map((error) => <li className={styles.error} key={error.msg}>{error.msg}</li>)}
+					{validationErrors.map((error, index) => <li className={styles.error} key={`${index}: ${error.msg}`}>{error.msg}</li>)}
 				</ul>
 			}
 		</div>

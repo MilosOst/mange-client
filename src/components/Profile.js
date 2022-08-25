@@ -73,7 +73,7 @@ function Profile() {
 			setUser(data.user);
 			setIsFollowing(data.isFollowing);
 			setIsCurrentUser(data.isCurrentUser);
-			console.log(res);
+
 		} catch (err) {
 
 			setNotFound(true);
@@ -135,7 +135,6 @@ function Profile() {
 			}
 			// Set current followers to empty array if followers haven't been fetched yet
 			setFollowers([...followers, ...data.followers]);
-			console.log(data.followers);
 		} catch (err) {
 			if (err.response.status === 401) navigate('/login');
 		}
