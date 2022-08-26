@@ -9,7 +9,7 @@ import {
 	Tabs, 
 	Tab, 
 	Box, 
-	Container, 
+	Grid,
 	Typography,
 } from '@mui/material';
 import RestaurantReview from './RestaurantReview.js';
@@ -263,13 +263,19 @@ function Profile() {
 							<Tab label='Recent' value='recent'/>
 						</Tabs>
 					</Box>
-					<Container maxWidth='md' sx={{ marginTop: '1rem' }}>
+					<Grid
+						container
+						alignItems='center'
+						sx={{ padding: '1rem' }}
+						spacing={2}
+						className={styles.reviewGrid}
+					>
 						{user && user.reviews.map((restaurantReview) => {
 							return (
-								<RestaurantReview key={restaurantReview._id} restaurantReview={restaurantReview} />
+								<RestaurantReview key={restaurantReview._id} restaurantReview={restaurantReview} user={user}/>
 							);
 						})}
-					</Container>
+					</Grid>
 				</div>
 			</div>
 		);

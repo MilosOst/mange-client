@@ -55,43 +55,11 @@
 
 .profileSecondary {
 	height: 100%;
-	padding: 1rem;
 }
 
-.reviewTitle {
-	font-size: 1.2rem;
-}
-
-.datePosted {
-	color: gray-text;
-}
-
-.dishReviews {
-	margin: 1rem 0;
-}
-
-.iconTextBox {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 1rem;
-}
-
-.dishReviewHeader {
-	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: 0.5rem;
-	align-items: center;
-}
-
-.reviewActions {
-	display: flex;
-	justify-content: space-around;
-}
-
-@media screen and (max-width: 320px) {
-	.dishReviewHeader {
-		display: flex;
-		flex-wrap: wrap;
+@media screen and (max-width: 500px) {
+	.reviewGrid {
+		padding: 0 !important;
+		margin-top: 1rem;
 	}
 }

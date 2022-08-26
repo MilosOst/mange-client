@@ -29,6 +29,24 @@ html, body, #root, .container {
 	flex: 1;
 }
 
+/* Override styles for review post header */
+.MuiCardHeader-action {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.swiper-pagination-bullet-active {
+	background-color: #000 !important;
+}
+
+.swiper-button-prev, .swiper-button-next {
+	color: white;
+}
+
+
+
 @media screen and (max-width: 568px) {
 	:root {
 		font-size: 14px;
