@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Typography, Button, TextField } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import styles from '../../styles/reviewform.module.css';
-import DishReview from './DishReview.js';
+import DishReviewForm from './DishReviewForm.js';
 
-function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, reviewTitle, setReviewTitle, validationErrors, images, setImages }) {
+function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishes, validationErrors, images, setImages }) {
 	const [error, setError] = useState(null);
 	
 	const addReview = () => {
@@ -40,9 +40,9 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 		setReviews(copy);
 	};
 
-	const handleImages = (index, newImages) => {
+	const handleImages = (index, image) => {
 		const copy = [...images];
-		copy[index] = newImages;
+		copy[index] = image;
 		setImages(copy);
 	};
 
@@ -57,16 +57,9 @@ function ReviewStepTwo({ reviews, setReviews, availableDishes, setAvailableDishe
 					Add Dish
 				</Button>
 			</header>
-			<TextField
-				value={reviewTitle}
-				onChange={(e) => setReviewTitle(e.target.value)}
-				label='Review Title'
-				className={styles.title}
-				required
-			/>
 			<ul className={styles.reviews}>
 				{reviews.map((review, index) => {
-					return <DishReview
+					return <DishReviewForm
 						review={review}		
 						key={index} 
 						setDish={setDish}

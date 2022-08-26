@@ -268,7 +268,7 @@ function Profile() {
 						alignItems='center'
 						sx={{ padding: '1rem' }}
 						spacing={2}
-						className={styles.reviewGrid}
+						className={`${styles.reviewGrid} ${user && user.reviews.length < 3 ? styles.centered : ''}`}
 					>
 						{user && user.reviews.map((restaurantReview) => {
 							return (

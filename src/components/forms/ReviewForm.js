@@ -20,7 +20,6 @@ function ReviewForm() {
 	const [validationErrors, setValidationErrors] = useState(null);
 	const [reviews, setReviews] = useState([{}]);
 	const [images, setImages] = useState([]);
-	const [reviewTitle, setReviewTitle] = useState('');
 	const [availableDishes, setAvailableDishes] = useState([]);
 
 	const getSteps = () => {
@@ -44,17 +43,16 @@ function ReviewForm() {
 			};
 			const formData = new FormData();
 			formData.append('reviews', JSON.stringify(reviews));
-			formData.append('review_title', JSON.stringify(reviewTitle));
 			formData.append('restaurant', JSON.stringify(selectedRestaurant));
 
 			// Append images
-			images.forEach((group, index) => {
-				Object.keys(group).forEach((image) => {
-					formData.append(`images[${index}]`, group[image]);
-				});
+			images.forEach((image, index) => {
+				console.log(image);
+				formData.append(`image${index}`, image);
 			});
 
-			await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
+			const res = await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
+			console.log(res);
 			setActiveStep(prevStep => prevStep + 1);
 		} catch (err) {
 			const { response } = err;
@@ -110,8 +108,6 @@ function ReviewForm() {
 					setReviews={setReviews}
 					availableDishes={availableDishes}
 					setAvailableDishes={setAvailableDishes}
-					reviewTitle={reviewTitle}
-					setReviewTitle={setReviewTitle}
 					validationErrors={validationErrors}
 					images={images}
 					setImages={setImages}

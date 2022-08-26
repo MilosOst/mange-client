@@ -57,6 +57,10 @@
 	height: 100%;
 }
 
+.centered {
+	justify-content: center;
+}
+
 @media screen and (max-width: 500px) {
 	.reviewGrid {
 		padding: 0 !important;

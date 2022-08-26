@@ -5,7 +5,7 @@ import RatingFull from './RatingFull';
 import RatingEmpty from './RatingEmpty';
 import styles from '../../styles/reviewform.module.css';
 
-function DishReview({ review, removeReview, index, setDish, setOpinion, setRating, availableDishes, setAvailableDishes, handleImages }) {
+function DishReviewForm({ review, removeReview, index, setDish, setOpinion, setRating, availableDishes, setAvailableDishes, handleImages }) {
 	const filter = createFilterOptions();
 
 	return (
@@ -70,13 +70,14 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 				label='What did you think of the food?'
 				multiline
 				minRows={2}
+				required
 			/>
-			<Typography variant='h5'>Add Photos</Typography>
+			<Typography variant='h5'>Add Photo</Typography>
 			<TextField 
 				type='file' 
 				variant='outlined' 
-				inputProps={{ accept: '.jpg, .png, .jpeg', multiple: true }}
-				onChange={(e) => handleImages(index, e.target.files)}
+				inputProps={{ accept: '.jpg, .png, .jpeg' }}
+				onChange={(e) => handleImages(index, e.target.files[0])}
 			/>
 			<IconButton onClick={() => removeReview(index)}>
 				<DeleteIcon />
@@ -85,4 +86,4 @@ function DishReview({ review, removeReview, index, setDish, setOpinion, setRatin
 	);
 }
 
-export default DishReview;
+export default DishReviewForm;

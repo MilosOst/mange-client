@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import RatingFull from './forms/RatingFull.js';
 import RatingEmpty from './forms/RatingEmpty.js';
+import foodPlaceholder from '../images/food-placeholder.png';
 
 function DishReview({ review }) {
 	return (
@@ -15,7 +16,7 @@ function DishReview({ review }) {
 				<CardMedia
 					className={styles.media}
 					component='img'
-					src='https://images.wallpaperscraft.com/image/single/coffee_book_glasses_140830_1920x1080.jpg'
+					src={review.photoURL || foodPlaceholder}
 				/>
 				<CardContent className={styles.cardContent}>
 					<Typography variant='h5'>
