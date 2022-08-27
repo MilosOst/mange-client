@@ -9,13 +9,15 @@ import ReviewForm from './components/forms/ReviewForm.js';
 import PrivateRoute from './components/auth/PrivateRoute.js';
 import Profile from './components/Profile.js';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
 
 	const verifyAuth = async () => {
 		try {
-			const res = await axios.get('http://localhost:3000/v1/users/currentUser', {
+			const res = await axios.get(`${BASE_URL}/v1/users/currentUser`, {
 				headers: {
 					Authorization: localStorage.getItem('token'),
 				}

@@ -6,6 +6,8 @@ import styles from '../styles/authforms.module.css';
 import { AuthContext } from '../contexts/AuthContext.js';
 import axios from 'axios';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function Login() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -16,7 +18,7 @@ function Login() {
 
 	const getCurrentUser = async () => {
 		try {
-			const res = await axios.get('http://localhost:3000/v1/users/currentUser', {
+			const res = await axios.get(`${BASE_URL}/v1/users/currentUser`, {
 				headers: {
 					Authorization: localStorage.getItem('token'),
 				}
@@ -34,7 +36,7 @@ function Login() {
 		e.preventDefault();
 		
 		try {
-			const res = await axios.post('http://localhost:3000/v1/login', {
+			const res = await axios.post(`${BASE_URL}/v1/login`, {
 				email,
 				password
 			});

@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReviewStepOne from './ReviewStepOne.js';
 import ReviewStepTwo from './ReviewStepTwo.js';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
 	const navigate = useNavigate();
@@ -28,7 +30,7 @@ function ReviewForm() {
 
 	const getRestaurantDishes = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/menu`);
+			const res = await axios.get(`${BASE_URL}/v1/restaurants/${selectedRestaurant.fsq_id}/menu`);
 			return res.data.menu;
 		} catch (err) {
 			return [];
@@ -51,7 +53,7 @@ function ReviewForm() {
 				formData.append(`image${index}`, image);
 			});
 
-			const res = await axios.post(`http://localhost:3000/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
+			const res = await axios.post(`${BASE_URL}/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
 			console.log(res);
 			setActiveStep(prevStep => prevStep + 1);
 		} catch (err) {

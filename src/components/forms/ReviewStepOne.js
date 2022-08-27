@@ -8,11 +8,13 @@ import {
 } from '@mui/material';
 import styles from '../../styles/reviewform.module.css';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function ReviewStepOne({ restaurantName, setRestaurantName, city, setCity, restaurants, setRestaurants, selectedRestaurant, setSelectedRestaurant }) {
 
 	const getRestaurants = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/v1/restaurants/search?query=${restaurantName}&near=${city}`);
+			const res = await axios.get(`${BASE_URL}/v1/restaurants/search?query=${restaurantName}&near=${city}`);
 			setRestaurants(res.data.results);
 		} catch (err) {
 			return;

@@ -18,6 +18,8 @@ import { AuthContext } from '../contexts/AuthContext.js';
 import UsersListModal from './UsersListModal.js';
 import EditProfile from './EditProfile.js';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const headers = {
 	Authorization: localStorage.getItem('token')
 };
@@ -67,7 +69,7 @@ function Profile() {
 
 	const fetchUserProfile = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/v1/users/${username}/profile`, { headers });
+			const res = await axios.get(`${BASE_URL}/v1/users/${username}/profile`, { headers });
 			const { data } = res;
 
 			setUser(data.user);
@@ -88,7 +90,7 @@ function Profile() {
 
 	const unfollowUser = async () => {
 		try {
-			await axios.delete(`http://localhost:3000/v1/users/${username}/followers`, { headers });
+			await axios.delete(`${BASE_URL}/v1/users/${username}/followers`, { headers });
 			setIsFollowing(false);
 			setUser({
 				...user,
@@ -101,7 +103,7 @@ function Profile() {
 	
 	const followUser = async () => {
 		try {
-			const res = await axios.post(`http://localhost:3000/v1/users/${username}/followers`, null, { headers });
+			const res = await axios.post(`${BASE_URL}/v1/users/${username}/followers`, null, { headers });
 
 			setIsFollowing(res.data.isFollowing);
 			setUser({
@@ -127,7 +129,7 @@ function Profile() {
 
 	const fetchFollowers = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/v1/users/${username}/followers?skip=${followersSkip}`, { headers });
+			const res = await axios.get(`${BASE_URL}/v1/users/${username}/followers?skip=${followersSkip}`, { headers });
 
 			const { data } = res;
 			if (data.followers.length === 0) {
@@ -150,7 +152,7 @@ function Profile() {
 
 	const fetchFollowing = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/v1/users/${username}/following?skip=${followingSkip}`, { headers });
+			const res = await axios.get(`${BASE_URL}/v1/users/${username}/following?skip=${followingSkip}`, { headers });
 			
 			const { data } = res;
 			if (data.following.length === 0) {

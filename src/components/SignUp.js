@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import styles from '../styles/authforms.module.css';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function SignUp() {
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -18,7 +20,7 @@ function SignUp() {
 		e.preventDefault();
 		
 		try {
-			const res = await axios.post('http://localhost:3000/v1/register', {
+			const res = await axios.post(`${BASE_URL}/v1/register`, {
 				email,
 				username,
 				password1,

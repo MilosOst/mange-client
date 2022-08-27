@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import { AuthContext } from '../contexts/AuthContext.js';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 function EditProfile({ currUser, setCurrUser }) {
 	const [open, setOpen] = useState(false);
 	const [imageFile, setImageFile] = useState(null);
@@ -55,7 +57,7 @@ function EditProfile({ currUser, setCurrUser }) {
 			if (imageFile) formData.append('profileImage', imageFile);
 			formData.append('bio', bio);
 
-			const res = await axios.put(`http://localhost:3000/v1/users/${currUser.username}/profile`, formData, { headers });
+			const res = await axios.put(`${BASE_URL}/v1/users/${currUser.username}/profile`, formData, { headers });
 
 			const { data } = res;
 
