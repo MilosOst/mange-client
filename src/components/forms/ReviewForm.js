@@ -49,12 +49,10 @@ function ReviewForm() {
 
 			// Append images
 			images.forEach((image, index) => {
-				console.log(image);
 				formData.append(`image${index}`, image);
 			});
 
-			const res = await axios.post(`${BASE_URL}/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
-			console.log(res);
+			await axios.post(`${BASE_URL}/v1/restaurants/${selectedRestaurant.fsq_id}/reviews`, formData, { headers });
 			setActiveStep(prevStep => prevStep + 1);
 		} catch (err) {
 			const { response } = err;
