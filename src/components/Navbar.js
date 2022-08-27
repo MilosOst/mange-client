@@ -16,7 +16,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../contexts/AuthContext.js';
 
 function Navbar() {
-	const { isLoggedIn, setIsLoggedIn, user } = useContext(AuthContext);
+	const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(AuthContext);
 	const [expanded, setExpanded] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
@@ -26,6 +26,7 @@ function Navbar() {
 	const logOut = () => {
 		localStorage.removeItem('token');
 		setIsLoggedIn(false);
+		setUser(null);
 		navigate('/login');
 	};
 
