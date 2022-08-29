@@ -134,6 +134,7 @@ function Profile() {
 			const { data } = res;
 			if (data.followers.length === 0) {
 				setIsAllFollowers(true);
+				return;
 			}
 			// Set current followers to empty array if followers haven't been fetched yet
 			setFollowers([...followers, ...data.followers]);
@@ -157,6 +158,7 @@ function Profile() {
 			const { data } = res;
 			if (data.following.length === 0) {
 				setIsAllFollowing(true);
+				return;
 			}
 
 			// Set current following to empty array if followers haven't been fetched yet
@@ -245,7 +247,6 @@ function Profile() {
 								<>
 									<EditProfile currUser={user} setCurrUser={setUser}/>
 								</>
-								
 							) :
 								(<Button
 									variant='contained'

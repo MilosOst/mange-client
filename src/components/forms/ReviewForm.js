@@ -10,6 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function ReviewForm() {
 	const [activeStep, setActiveStep] = useState(0);
+	const [isResponsePending, setIsResponsePending] = useState(false);
 	const navigate = useNavigate();
 
 	// Step One props
@@ -38,6 +39,9 @@ function ReviewForm() {
 	};
 
 	const submitReview = async () => {
+		if (isResponsePending) return;
+		setIsResponsePending(true);
+
 		try {
 			const headers = {
 				Authorization: localStorage.getItem('token'),
@@ -63,6 +67,7 @@ function ReviewForm() {
 				setValidationErrors(response.data.errors);
 			}
 		}
+		setIsResponsePending(false);
 	};
 
 	const handleNext = async (e) => {
@@ -155,6 +160,7 @@ function ReviewForm() {
 							<Button
 								type='submit'
 								variant='contained'
+								disabled={isResponsePending}
 								className={styles.nextBtn}>
 								{activeStep === getSteps().length - 1 ? 'Post Review' : 'Next'}
 							</Button>

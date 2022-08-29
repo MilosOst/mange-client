@@ -26,7 +26,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-function RestaurantReview({ restaurantReview, user }) {
+function RestaurantReview({ restaurantReview, user, fullWidth }) {
 	
 	return (
 		<Grid
@@ -34,8 +34,8 @@ function RestaurantReview({ restaurantReview, user }) {
 			justifyContent='stretch' 
 			xs={12}
 			sm={12}
-			md={6}
-			lg={4}
+			md={fullWidth ? 12 : 6}
+			lg={fullWidth ? 12 : 4}
 		>
 			<Card className={styles.card} variant='elevation' elevation={8}>
 				<CardHeader

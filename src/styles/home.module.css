@@ -1,76 +1,19 @@
 @value brand-red from './colors.css';
 
-.heroContainer {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	min-height: 100vh;
-	width: 100vw;
-}
-
-.logoBox {
-	background: no-repeat url('../images/mange-hero.jpg');
-	background-position: center;
-	background-size: cover;
-}
-
-.appInfo {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 1.5rem;
-	padding: 20px;
-	background-color: white;
-}
-
-.iconBox {
-	height: 100px;
-	width: 100px;
-}
-
-.iconBox > img {
-	height: 100%;
-	width: 100%;
-}
-
-.startInfo {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
-	margin-top: 1rem;
-}
-
-.btn {
-	border-radius: 8px !important;
-	font-size: 1.1rem !important;
-}
-
-.signUpBtn {
+.signupBtn {
+	color: white !important;
 	background-color: brand-red !important;
-	color: white;
+	margin-top: 1rem !important;
+	font-size: 1rem !important;
 }
 
-.loginBox {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
+.reviewGrid {
+	margin-top: 1rem !important;
 }
 
-.loginBtn {
-	color: brand-red !important;
-	border: 1px solid black !important;
-	background-color: white !important;
-}
-
-@media screen and (max-width: 1000px) {
-	.heroContainer {
-		grid-template-rows: 1fr 1fr;
-		grid-template-columns: auto;
-	}
-
-	.logoBox {
-		order: 2;
+@media screen and (max-width: 500px) {
+	.reviewGrid {
+		padding: 0 !important;
+		margin-top: 1rem;
 	}
 }
