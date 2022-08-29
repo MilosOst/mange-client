@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../styles/navbar.module.css';
 import {
 	Button,
@@ -14,6 +14,8 @@ import menuIcon from '../images/menu.svg';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../contexts/AuthContext.js';
+import Searchbar from './Searchbar.js';
+import NavLogo from '../images/mange-nav-logo2.png';
 
 function Navbar() {
 	const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(AuthContext);
@@ -22,6 +24,7 @@ function Navbar() {
 	const open = Boolean(anchorEl);
 
 	let navigate = useNavigate();
+	let location = useLocation();
 
 	const logOut = () => {
 		localStorage.removeItem('token');
@@ -34,10 +37,16 @@ function Navbar() {
 		setAnchorEl(e.currentTarget);
 	};
 
+	useEffect(() => {
+		setExpanded(false);
+	}, [location.pathname]);
+
 	return (
 		<nav className={styles.navbar}>
 			<header className={styles.navHeader}>
-				<h2 className={styles.brandTitle}>Mange</h2>
+				<div>
+					<img src={NavLogo} alt="Mange" className={styles.navLogo}  onClick={() => navigate('/')}/>
+				</div>
 				<button className={styles.menuBtn} onClick={() => setExpanded(!expanded)}>
 					<img src={menuIcon} alt='Toggle Menu' />
 				</button>
@@ -50,6 +59,7 @@ function Navbar() {
 			<section className={`${styles.profileSection} ${expanded ? styles.expanded : ''}`}>
 				{isLoggedIn &&			
 					<>
+					<Searchbar/>
 					<IconButton onClick={handleClick}>
 						<Avatar src={user.profilePicURL} />
 					</IconButton>

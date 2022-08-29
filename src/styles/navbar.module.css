@@ -9,19 +9,24 @@
 	background-color: brand-red;
 }
 
-.brandTitle {
-	color: white;
+.navHeader {
+	flex: 1;
+}
+
+.navLogo {
+	display: flex;
+	width: auto;
+	height: auto;
+	max-height: 70px;
+	cursor: pointer;
 }
 
 .menuBtn {
 	display: none;
 }
 
-.brandLogo {
-	width: min(200px, 50vw);
-}
-
 .navLinks {
+	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -46,7 +51,9 @@
 }
 
 .profileSection {
+	flex: 1;
 	display: flex;
+	justify-content: flex-end;
 	align-items: center;
 	gap: 1rem;
 	order: 1;	
@@ -66,7 +73,6 @@
 	height: 32px;
 	width: 32px;
 }
-
 
 @media screen and (max-width: 768px) {
 	.navbar {
