@@ -73,7 +73,7 @@ function Feed() {
 					<RestaurantReview
 						key={post.post._id}
 						restaurantReview={post.post}
-						user={post.user}
+						postUser={post.user}
 						fullWidth={true}
 					/>
 				);

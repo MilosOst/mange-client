@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styles from '../styles/review.module.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -24,9 +24,58 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../contexts/AuthContext.js';
 
-function RestaurantReview({ restaurantReview, user, fullWidth }) {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const formatter = Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
+const headers = {
+	Authorization: localStorage.getItem('token')
+};
+
+function RestaurantReview({ restaurantReview, postUser, fullWidth }) {
+	const [hasLiked, setHasLiked] = useState(restaurantReview.liked);
+	const [likeCount, setLikeCount] = useState(restaurantReview.likeCount);
+
+	const navigate = useNavigate();
+	const { setGlobalUser } = useContext(AuthContext);
+
+	const likePost = async () => {
+		try {
+			const res = await axios.post(`${BASE_URL}/v1/posts/${restaurantReview._id}/likes`, null, { headers });
+			setHasLiked(res.data.liked);
+			setLikeCount(res.data.likeCount);
+		} catch (err) {
+			const status = err.response.status;
+			if (status === 401) {
+				navigate('/login');
+				setGlobalUser(null);
+			} 
+			else if (status === 409) {
+				setLikeCount(err.response.data.likeCount);
+				setHasLiked(err.response.data.liked);
+			}
+		}	
+	};
+
+	const unlikePost = async () => {
+		try {
+			const res = await axios.delete(`${BASE_URL}/v1/posts/${restaurantReview._id}/likes`, { headers });
+			setHasLiked(res.data.liked);
+			setLikeCount(res.data.likeCount);
+		} catch (err) {
+			const status = err.response.status;
+			if (status === 401) {
+				navigate('/login');
+				setGlobalUser(null);
+			}
+		}
+	};
+
+	const handleLikeClick = async () => {
+		hasLiked ? await unlikePost() : await likePost();
+	};
 	
 	return (
 		<Grid
@@ -41,11 +90,11 @@ function RestaurantReview({ restaurantReview, user, fullWidth }) {
 				<CardHeader
 					avatar={
 						<Avatar
-							src={user.profilePicURL} 
+							src={postUser.profilePicURL} 
 							component={Link} 
-							to={`/users/${user.username}`}	
+							to={`/users/${postUser.username}`}	
 						/> }
-					title={user.username}
+					title={postUser.username}
 					subheader={`${moment(restaurantReview.date_posted).fromNow()} @ ${restaurantReview.restaurant.name}`}
 					action={
 						<IconButton >
@@ -72,12 +121,17 @@ function RestaurantReview({ restaurantReview, user, fullWidth }) {
 				</Swiper>
 
 				<CardActions className={styles.cardActions}>
-					<IconButton>
-						<FavoriteBorderIcon sx={{ marginLeft: '6px' }} />
-					</IconButton>
-					<IconButton>
-						<ChatBubbleOutlineIcon />
-					</IconButton>
+					<div className={styles.cardAction}>
+						<IconButton onClick={handleLikeClick}>
+							<FavoriteBorderIcon sx={{ marginLeft: '6px' }} color={hasLiked ? 'secondary' : 'inherit'}/>
+						</IconButton>
+						<span className={styles.statCount}>{formatter.format(likeCount)}</span>
+					</div>
+					<div>
+						<IconButton>
+							<ChatBubbleOutlineIcon />
+						</IconButton>
+					</div>
 				</CardActions>
 			</Card>
 		</Grid>

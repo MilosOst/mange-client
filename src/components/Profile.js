@@ -27,7 +27,7 @@ const headers = {
 function Profile() {
 	const params = useParams();
 	const username = params.username.toUpperCase();
-	const { isLoggedIn } = useContext(AuthContext);
+	const { globalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const [user, setUser] = useState(null);
@@ -116,7 +116,7 @@ function Profile() {
 	};
 
 	const handleFollow = async () => {
-		if (!isLoggedIn) {
+		if (!globalUser) {
 			navigate('/login');
 		}
 		else if (isFollowing) {
@@ -165,7 +165,9 @@ function Profile() {
 			const followingList = following ? following : [];
 			setFollowing([...followingList, ...data.following]);
 		} catch (err) {
-			if (err.response.status === 401) navigate('/login');
+			if (err.response.status === 401) {
+				navigate('/login');
+			}
 		}
 	};
 
@@ -275,7 +277,7 @@ function Profile() {
 					>
 						{user && user.reviews.map((restaurantReview) => {
 							return (
-								<RestaurantReview key={restaurantReview._id} restaurantReview={restaurantReview} user={user}/>
+								<RestaurantReview key={restaurantReview._id} restaurantReview={restaurantReview} postUser={user}/>
 							);
 						})}
 					</Grid>

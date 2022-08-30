@@ -41,7 +41,7 @@ function Searchbar() {
 			onClose={() => setOpen(false)}
 			options={results}
 			getOptionLabel={(option) => option.username}
-			sx={{ width: '180px', backgroundColor: 'whitesmoke', borderRadius: 3 }}
+			sx={{ width: '200px', backgroundColor: 'whitesmoke', borderRadius: 3 }}
 			filterOptions={(x) => x}
 			noOptionsText={!username ? 'Enter a username to search' : 'No users found'}
 			forcePopupIcon={false}
@@ -50,7 +50,7 @@ function Searchbar() {
 					<ListItemAvatar>
 						<Avatar src={user.profilePicURL} alt={user.username} sx={{ width: '45px', height: '45px', backgroundColor: '#d91426' }}/>
 					</ListItemAvatar>
-					<ListItemText>{user.username}</ListItemText>
+					<ListItemText sx={{ color: 'black !important' }}>{user.username}</ListItemText>
 				</ListItem>
 			)}
 			renderInput={(params) => (

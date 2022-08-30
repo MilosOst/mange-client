@@ -8,7 +8,7 @@ import { AuthContext } from '../../contexts/AuthContext.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function PrivateRoute() {
-	const { isLoggedIn, setIsLoggedIn, setUser } = useContext(AuthContext);
+	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const verifyIsLoggedIn = async () => {
@@ -18,10 +18,8 @@ function PrivateRoute() {
 					Authorization: localStorage.getItem('token'),
 				}
 			});
-			setIsLoggedIn(true);
 		} catch (err) {
-			setIsLoggedIn(false);
-			setUser(null);
+			setGlobalUser(null);
 			localStorage.removeItem('token');
 			navigate('/login');
 		}
@@ -32,7 +30,7 @@ function PrivateRoute() {
 		verifyIsLoggedIn();
 	}, []);
 
-	return isLoggedIn ? <Outlet /> : '';
+	return globalUser ? <Outlet /> : '';
 }
 
 export default PrivateRoute;

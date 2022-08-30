@@ -13,7 +13,7 @@ function Login() {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 
-	const { setIsLoggedIn, setUser } = useContext(AuthContext);
+	const { setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const getCurrentUser = async () => {
@@ -23,11 +23,9 @@ function Login() {
 					Authorization: localStorage.getItem('token'),
 				}
 			});
-			setIsLoggedIn(true);
-			setUser(res.data.user);
+			setGlobalUser(res.data.user);
 		} catch (err) {
-			setIsLoggedIn(false);
-			setUser(null);
+			setGlobalUser(null);
 			localStorage.removeItem('token');
 		}
 	};

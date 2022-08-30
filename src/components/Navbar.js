@@ -15,10 +15,10 @@ import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../contexts/AuthContext.js';
 import Searchbar from './Searchbar.js';
-import NavLogo from '../images/mange-nav-logo2.png';
+import NavLogo from '../images/mange-nav-logo.png';
 
 function Navbar() {
-	const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(AuthContext);
+	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	const [expanded, setExpanded] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
@@ -28,8 +28,7 @@ function Navbar() {
 
 	const logOut = () => {
 		localStorage.removeItem('token');
-		setIsLoggedIn(false);
-		setUser(null);
+		setGlobalUser(null);
 		navigate('/login');
 	};
 
@@ -57,11 +56,11 @@ function Navbar() {
 				<li><Link to='/explore' className={styles.navLink}>Explore</Link></li>
 			</ul>
 			<section className={`${styles.profileSection} ${expanded ? styles.expanded : ''}`}>
-				{isLoggedIn &&			
+				{globalUser &&			
 					<>
 					<Searchbar/>
 					<IconButton onClick={handleClick}>
-						<Avatar src={user.profilePicURL} />
+						<Avatar src={globalUser.profilePicURL} />
 					</IconButton>
 					<Menu
 						anchorEl={anchorEl}
@@ -69,7 +68,7 @@ function Navbar() {
 						onClose={() => setAnchorEl(null)}
 						onClick={() => setAnchorEl(null)}
 					>
-						<MenuItem sx={{ gap: '8px' }} component={Link} to={`/users/${user.username}`}>
+						<MenuItem sx={{ gap: '8px' }} component={Link} to={`/users/${globalUser.username}`}>
 							<ListItemIcon className={styles.menuItem}>
 								<AccountCircleIcon className={styles.menuIcon} /> Profile
 							</ListItemIcon>
@@ -88,7 +87,7 @@ function Navbar() {
 					</>
 				}
 
-				{!isLoggedIn &&
+				{!globalUser &&
 				<>
 					<Button
 						variant='outlined'

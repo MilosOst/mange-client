@@ -10,8 +10,8 @@ import LandingPage from './LandingPage.js';
 import Feed from './Feed.js';
 
 function Home() {
-	const { user } = useContext(AuthContext);
-	if (!user) {
+	const { globalUser } = useContext(AuthContext);
+	if (!globalUser) {
 		return <LandingPage/>;
 	}
 	else {

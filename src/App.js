@@ -13,8 +13,7 @@ import Home from './components/Home.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [user, setUser] = useState(null);
+	const [globalUser, setGlobalUser] = useState(null);
 	const location = useLocation();
 
 	const verifyAuth = async () => {
@@ -24,11 +23,9 @@ function App() {
 					Authorization: localStorage.getItem('token'),
 				}
 			});
-			setIsLoggedIn(true);
-			setUser(res.data.user);
+			setGlobalUser(res.data.user);
 		} catch (err) {
-			setIsLoggedIn(false);
-			setUser(null);
+			setGlobalUser(null);
 			localStorage.removeItem('token');
 		}
 	};
@@ -38,9 +35,9 @@ function App() {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, verifyAuth, user, setUser }}>
+		<AuthContext.Provider value={{ verifyAuth, globalUser, setGlobalUser }}>
 			<div className='container'>
-				{location.pathname === '/' && !user ? null : <Navbar />}
+				{location.pathname === '/' && !globalUser ? null : <Navbar />}
 				<main className='content'>
 					<Routes>
 						<Route path='/' element={<Home/>}/>

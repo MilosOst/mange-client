@@ -21,7 +21,7 @@ function EditProfile({ currUser, setCurrUser }) {
 	const [bio, setBio] = useState(currUser.bio);
 	const [error, setError] = useState(null);
 
-	const { user, setUser } = useContext(AuthContext);
+	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	
 	const handleImageChange = (e) => {
 		setImageFile(e.target.files[0]);
@@ -64,13 +64,13 @@ function EditProfile({ currUser, setCurrUser }) {
 			setCurrUser({
 				...currUser,
 				bio: data.bio,
-				profilePicURL: data.imageURL ? data.imageURL : user.profilePicURL,
+				profilePicURL: data.imageURL ? data.imageURL : currUser.profilePicURL,
 			});
 
 			// Update global user profile picture
-			setUser({
-				...user,
-				profilePicURL: data.imageURL ? data.imageURL : user.profilePicURL,
+			setGlobalUser({
+				...globalUser,
+				profilePicURL: data.imageURL ? data.imageURL : globalUser.profilePicURL,
 			});
 
 			closeForm();
