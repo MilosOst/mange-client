@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from '../styles/profile.module.css';
+import styles from '../../../styles/profile.module.css';
 import {
 	Avatar,
 	Button, 
@@ -12,9 +12,10 @@ import {
 	Grid,
 	Typography,
 } from '@mui/material';
-import RestaurantReview from './RestaurantReview.js';
-import NotFound from './auth/NotFound.js';
-import { AuthContext } from '../contexts/AuthContext.js';
+import RestaurantReview from '../../posts/RestaurantReview.js';
+import NotFound from '../../auth/NotFound.js';
+import { AuthContext } from '../../../contexts/AuthContext.js';
+import { ProfilePostContext } from '../../../contexts/ProfilePostContext.js';
 import UsersListModal from './UsersListModal.js';
 import EditProfile from './EditProfile.js';
 
@@ -27,7 +28,7 @@ const headers = {
 function Profile() {
 	const params = useParams();
 	const username = params.username.toUpperCase();
-	const { globalUser } = useContext(AuthContext);
+	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const [user, setUser] = useState(null);
@@ -35,7 +36,7 @@ function Profile() {
 	const [isCurrentUser, setIsCurrentUser] = useState(false);
 	const [selectedTab, setSelectedTab] = useState('All');
 
-	// State variables to keep track of followers/following if api should be called to fetch more info
+	// State variables to keep track of followers/following to know if api should be called to fetch more info
 	const [followers, setFollowers] = useState([]);
 	const [following, setFollowing] = useState([]);
 	const [followersSkip, setFollowersSkip] = useState(0);
@@ -139,12 +140,15 @@ function Profile() {
 			// Set current followers to empty array if followers haven't been fetched yet
 			setFollowers([...followers, ...data.followers]);
 		} catch (err) {
-			if (err.response.status === 401) navigate('/login');
+			if (err.response.status === 401) {
+				navigate('/login');
+				setGlobalUser(null);
+			}
 		}
 	};
 
 	const handleFollowersOpen = async () => {
-		// Check if followers have been fetched already, null/undefined indicates that they haven't
+		// Check if followers have been fetched already
 		if (followers.length === 0) {
 			await fetchFollowers();
 		}
@@ -167,16 +171,37 @@ function Profile() {
 		} catch (err) {
 			if (err.response.status === 401) {
 				navigate('/login');
+				setGlobalUser(null);
 			}
 		}
 	};
 
 	const handleFollowingOpen = async () => {
-		// Check if following has been fetched already, null/undefined indicates no fetch yet
+		// Check if following has been fetched already
 		if (following.length === 0) {
 			await fetchFollowing();
 		}
 		setFollowingOpen(true);
+	};
+
+	const deletePost = async (postIndex) => {
+		try {
+			const postID = user.reviews[postIndex]._id;
+			await axios.delete(`${BASE_URL}/v1/posts/${postID}`, { headers });
+
+			// Remove post from posts
+			const copy = [...user.reviews];
+			copy.splice(postIndex, 1);
+			setUser({
+				...user,
+				reviews: copy 
+			});
+		} catch (err) {
+			if (err.response.status === 401) {
+				navigate('/login');
+				setGlobalUser(null);
+			}
+		}
 	};
 
 	// Infinite scroll fetch for followers
@@ -275,11 +300,19 @@ function Profile() {
 						spacing={2}
 						className={`${styles.reviewGrid} ${user && user.reviews.length < 3 ? styles.centered : ''}`}
 					>
-						{user && user.reviews.map((restaurantReview) => {
-							return (
-								<RestaurantReview key={restaurantReview._id} restaurantReview={restaurantReview} postUser={user}/>
-							);
-						})}
+						<ProfilePostContext.Provider value={{ deletePost }}>
+							{user && user.reviews.map((restaurantReview, index) => {
+								return (
+									<RestaurantReview 
+										key={restaurantReview._id}
+										index={index}
+										restaurantReview={restaurantReview} 
+										postUser={user}
+										onDelete={deletePost}
+									/>
+								);
+							})}
+						</ProfilePostContext.Provider>
 					</Grid>
 				</div>
 			</div>

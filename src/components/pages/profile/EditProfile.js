@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import profileStyles from '../styles/profile.module.css';
-import styles from '../styles/editprofile.module.css';
+import profileStyles from '../../../styles/profile.module.css';
+import styles from '../../../styles/editprofile.module.css';
 import {
 	Button,
 	Dialog,
@@ -10,7 +10,7 @@ import {
 	Typography,
 	TextField
 } from '@mui/material';
-import { AuthContext } from '../contexts/AuthContext.js';
+import { AuthContext } from '../../../contexts/AuthContext.js';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Autocomplete, TextField, Rating, Card, IconButton, Typography, createFilterOptions } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RatingFull from './RatingFull';
-import RatingEmpty from './RatingEmpty';
+import RatingFull from '../icons/RatingFull';
+import RatingEmpty from '../icons/RatingEmpty';
 import styles from '../../styles/reviewform.module.css';
 
 function DishReviewForm({ review, removeReview, index, setDish, setOpinion, setRating, availableDishes, setAvailableDishes, handleImages }) {

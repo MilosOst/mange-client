@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Paper } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import styles from '../styles/authforms.module.css';
+import styles from '../../styles/authforms.module.css';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

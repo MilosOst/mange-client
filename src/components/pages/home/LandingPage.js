@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from '../styles/landingpage.module.css';
-import appIcon from '../images/mange-icon.jpg';
+import styles from '../../../styles/landingpage.module.css';
+import appIcon from '../../../images/mange-icon.jpg';
 import { Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 

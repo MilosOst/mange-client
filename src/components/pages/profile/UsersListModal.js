@@ -11,7 +11,7 @@ import {
 	Avatar
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import styles from '../styles/userslist.module.css';
+import styles from '../../../styles/userslist.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 function UsersListModal({ open, setOpen, title, users, setSkip }) {

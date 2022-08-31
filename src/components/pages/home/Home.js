@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext.js';
-import styles from '../styles/home.module.css';
+import { AuthContext } from '../../../contexts/AuthContext.js';
+import styles from '../../../styles/home.module.css';
 import {
 	Button,
 	Grid,

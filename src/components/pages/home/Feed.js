@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	Grid,
 	Alert
 } from '@mui/material';
 import axios from 'axios';
-import RestaurantReview from './RestaurantReview.js';
-import styles from '../styles/home.module.css';
+import { AuthContext } from '../../../contexts/AuthContext.js';
+import RestaurantReview from '../../posts/RestaurantReview.js';
+import styles from '../../../styles/home.module.css';
 import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -18,6 +19,7 @@ function Feed() {
 	const [isAllContent, setIsAllContent] = useState(false);
 	const [beforeDate, setBeforeDate] = useState('9999-12-31');
 
+	const { setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	// Set up infinite scroll
@@ -44,6 +46,7 @@ function Feed() {
 			setPosts([...posts, ...newPosts]);
 		} catch (err) {
 			if (err.response.status === 401) {
+				setGlobalUser(null);
 				navigate('/login');
 			}
 		}

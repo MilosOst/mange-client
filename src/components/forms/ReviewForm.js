@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { Container, Stepper, Step, StepLabel, Paper, Button, Alert } from '@mui/material';
+import { AuthContext } from '../../contexts/AuthContext.js';
 import styles from '../../styles/reviewform.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ReviewStepOne from './ReviewStepOne.js';
@@ -9,6 +10,8 @@ import ReviewStepTwo from './ReviewStepTwo.js';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function ReviewForm() {
+	const { setGlobalUser } = useContext(AuthContext);
+
 	const [activeStep, setActiveStep] = useState(0);
 	const [isResponsePending, setIsResponsePending] = useState(false);
 	const navigate = useNavigate();
@@ -61,6 +64,7 @@ function ReviewForm() {
 		} catch (err) {
 			const { response } = err;
 			if (response.status === 401) {
+				setGlobalUser(null);
 				navigate('/login');
 			}
 			else if (response.status === 400) {

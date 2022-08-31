@@ -1,14 +1,14 @@
 import React from 'react';
-import styles from '../styles/review.module.css';
+import styles from '../../styles/review.module.css';
 import {
 	CardMedia,
 	CardContent,
 	Rating,
 	Typography,
 } from '@mui/material';
-import RatingFull from './forms/RatingFull.js';
-import RatingEmpty from './forms/RatingEmpty.js';
-import foodPlaceholder from '../images/food-placeholder.png';
+import RatingFull from '../icons/RatingFull.js';
+import RatingEmpty from '../icons/RatingEmpty.js';
+import foodPlaceholder from '../../images/food-placeholder.png';
 
 function DishReview({ review }) {
 	return (

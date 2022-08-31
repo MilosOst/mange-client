@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { useState } from 'react';
 import { Paper, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from '../styles/authforms.module.css';
-import { AuthContext } from '../contexts/AuthContext.js';
+import styles from '../../styles/authforms.module.css';
+import { AuthContext } from '../../contexts/AuthContext.js';
 import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
