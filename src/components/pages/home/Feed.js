@@ -22,6 +22,10 @@ function Feed() {
 	const { setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		headers.Authorization = localStorage.getItem('token');
+	}, [localStorage.getItem('token')]);
+
 	// Set up infinite scroll
 	const handleScroll = (e) => {
 		const { scrollHeight, scrollTop } = e.target.documentElement;
