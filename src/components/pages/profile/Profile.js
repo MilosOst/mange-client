@@ -204,6 +204,10 @@ function Profile() {
 		}
 	};
 
+	useEffect(() => {
+		headers.Authorization = localStorage.getItem('token');
+	}, [localStorage.getItem('token')]);
+
 	// Infinite scroll fetch for followers
 	useEffect(() => {
 		// Don't fetch if change is due to initial render reset

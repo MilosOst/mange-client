@@ -22,6 +22,7 @@ import {
 import DishReview from './DishReview.js';
 import PostMenu from './PostMenu.js';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import moment from 'moment';
@@ -135,7 +136,10 @@ function RestaurantReview({ index, restaurantReview, postUser, fullWidth }) {
 				<CardActions className={styles.cardActions}>
 					<div className={styles.cardAction}>
 						<IconButton onClick={handleLikeClick}>
-							<FavoriteBorderIcon sx={{ marginLeft: '6px' }} color={hasLiked ? 'secondary' : 'inherit'}/>
+							{hasLiked
+							? (<FavoriteIcon sx={{ marginLeft: '6px', color: '#d91426' }} />)
+							: (<FavoriteBorderIcon sx={{ marginLeft: '6px' }} />)
+							}
 						</IconButton>
 						<span className={styles.statCount}>{formatter.format(likeCount)}</span>
 					</div>
