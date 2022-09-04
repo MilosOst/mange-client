@@ -70,7 +70,6 @@ function DishReviewForm({ review, removeReview, index, setDish, setOpinion, setR
 				label='What did you think of the food?'
 				multiline
 				minRows={2}
-				required
 			/>
 			<Typography variant='h5'>Add Photo</Typography>
 			<TextField 
