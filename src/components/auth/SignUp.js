@@ -31,7 +31,8 @@ function SignUp() {
 				navigate('/login');
 			}
 		} catch (err) {
-			setErrors(err.response.data.errors);
+			const data = err.response.data;
+			setErrors(data.errors || [data.error]);
 		}
 	};
 
