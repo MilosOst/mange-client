@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.js';
 import SignUp from './components/auth/SignUp.js';
@@ -14,6 +15,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function App() {
 	const [globalUser, setGlobalUser] = useState(null);
+	const [socket, setSocket] = useState(null);
 	const location = useLocation();
 
 	const verifyAuth = async () => {
@@ -31,13 +33,20 @@ function App() {
 	};
 
 	useEffect(() => {
+		setSocket(io(BASE_URL));
 		verifyAuth();
 	}, []);
+
+	useEffect(() => {
+		if (globalUser) {
+			socket.emit('setup', globalUser);
+		}
+	}, [globalUser]);
 
 	return (
 		<AuthContext.Provider value={{ verifyAuth, globalUser, setGlobalUser }}>
 			<div className='container'>
-				{location.pathname === '/' && !globalUser ? null : <Navbar />}
+				{location.pathname === '/' && !globalUser ? null : <Navbar socket={socket}/>}
 				<main className='content'>
 					<Routes>
 						<Route path='/' element={<Home/>}/>

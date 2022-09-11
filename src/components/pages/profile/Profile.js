@@ -31,6 +31,9 @@ function Profile() {
 	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	const navigate = useNavigate();
 
+	// Store state for pending response to disable buttons
+	const [isResponsePending, setIsResponsePending] = useState(false);
+
 	const [user, setUser] = useState(null);
 	const [isFollowing, setIsFollowing] = useState(false);
 	const [isCurrentUser, setIsCurrentUser] = useState(false);
@@ -69,6 +72,7 @@ function Profile() {
 	};
 
 	const fetchUserProfile = async () => {
+		setIsResponsePending(true);
 		try {
 			const res = await axios.get(`${BASE_URL}/v1/users/${username}/profile`, { headers });
 			const { data } = res;
@@ -78,10 +82,10 @@ function Profile() {
 			setIsCurrentUser(data.isCurrentUser);
 
 		} catch (err) {
-
 			setNotFound(true);
 			setErrorOccured(true);
 		}
+		setIsResponsePending(false);
 	};
 
 	useEffect(() => {
@@ -90,6 +94,7 @@ function Profile() {
 	}, [username]);
 
 	const unfollowUser = async () => {
+		setIsResponsePending(true);
 		try {
 			await axios.delete(`${BASE_URL}/v1/users/${username}/followers`, { headers });
 			setIsFollowing(false);
@@ -100,9 +105,11 @@ function Profile() {
 		} catch (err) {
 			return;
 		}
+		setIsResponsePending(false);
 	};
 	
 	const followUser = async () => {
+		setIsResponsePending(true);
 		try {
 			const res = await axios.post(`${BASE_URL}/v1/users/${username}/followers`, null, { headers });
 
@@ -114,6 +121,7 @@ function Profile() {
 		} catch (err) {
 			return;
 		}
+		setIsResponsePending(false);
 	};
 
 	const handleFollow = async () => {
@@ -282,7 +290,8 @@ function Profile() {
 								(<Button
 									variant='contained'
 									className={`${styles.profileBtn} ${isFollowing ? styles.following : ''}`}
-									onClick={handleFollow}>
+									onClick={handleFollow}
+									disabled={isResponsePending}>
 									{isFollowing ? 'Following' : 'Follow'}
 								</Button>)
 							}

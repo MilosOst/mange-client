@@ -1,0 +1,9 @@
+.dot {
+	height: 12px !important;
+	width: 12px !important;
+	border-radius: 50% !important;
+}
+
+.badge {
+	background-color: #3ba16d !important;
+}

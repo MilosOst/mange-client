@@ -14,10 +14,11 @@ import menuIcon from '../images/menu.svg';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../contexts/AuthContext.js';
+import Notifications from './Notifications.js';
 import Searchbar from './Searchbar.js';
 import NavLogo from '../images/mange-nav-logo.png';
 
-function Navbar() {
+function Navbar({ socket }) {
 	const { globalUser, setGlobalUser } = useContext(AuthContext);
 	const [expanded, setExpanded] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -59,31 +60,34 @@ function Navbar() {
 				{globalUser &&			
 					<>
 					<Searchbar/>
-					<IconButton onClick={handleClick}>
-						<Avatar src={globalUser.profilePicURL} />
-					</IconButton>
-					<Menu
-						anchorEl={anchorEl}
-						open={open}
-						onClose={() => setAnchorEl(null)}
-						onClick={() => setAnchorEl(null)}
-					>
-						<MenuItem sx={{ gap: '8px' }} component={Link} to={`/users/${globalUser.username}`}>
-							<ListItemIcon className={styles.menuItem}>
-								<AccountCircleIcon className={styles.menuIcon} /> Profile
-							</ListItemIcon>
-						</MenuItem>
-						<MenuItem component={Link} to='/reviews/new'>
-							<ListItemIcon className={styles.menuItem}>
-								<AddIcon className={styles.menuIcon}/> Add Review
-							</ListItemIcon>
-						</MenuItem>
-						<MenuItem onClick={logOut}>
-							<ListItemIcon className={styles.menuItem}>
-								<Logout className={styles.menuIcon}/> Sign Out
-							</ListItemIcon>
-						</MenuItem>
-					</Menu>
+					<div style={{ display: 'flex' }}>
+						<Notifications socket={socket} />
+						<IconButton onClick={handleClick}>
+							<Avatar src={globalUser.profilePicURL} />
+						</IconButton>
+						<Menu
+							anchorEl={anchorEl}
+							open={open}
+							onClose={() => setAnchorEl(null)}
+							onClick={() => setAnchorEl(null)}
+						>
+							<MenuItem sx={{ gap: '8px' }} component={Link} to={`/users/${globalUser.username}`}>
+								<ListItemIcon className={styles.menuItem}>
+									<AccountCircleIcon className={styles.menuIcon} /> Profile
+								</ListItemIcon>
+							</MenuItem>
+							<MenuItem component={Link} to='/reviews/new'>
+								<ListItemIcon className={styles.menuItem}>
+									<AddIcon className={styles.menuIcon}/> Add Review
+								</ListItemIcon>
+							</MenuItem>
+							<MenuItem onClick={logOut}>
+								<ListItemIcon className={styles.menuItem}>
+									<Logout className={styles.menuIcon}/> Sign Out
+								</ListItemIcon>
+							</MenuItem>
+						</Menu>
+					</div>
 					</>
 				}
 

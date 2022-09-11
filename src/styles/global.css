@@ -45,8 +45,6 @@ html, body, #root, .container {
 	color: white;
 }
 
-
-
 @media screen and (max-width: 568px) {
 	:root {
 		font-size: 14px;
